@@ -1,0 +1,10 @@
+Proyecto #1 - Quiniegol
+
+Estudiante:
+Tayron Salas Núñez
+
+Repositorio GitHub:
+https://github.com/TayronSN/Quiniegol.git
+
+Proyecto Jira:
+https://tayronsalas.atlassian.net/jira/software/projects/QP1TS/summary?atlOrigin=eyJpIjoiOGFhYTUwNTQ1MDRiNGI3YThlNjI4MGYxODU3MWRkYzgiLCJwIjoiaiJ9
