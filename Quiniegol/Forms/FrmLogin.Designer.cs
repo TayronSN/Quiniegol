@@ -32,7 +32,7 @@
             Titulo1Lgn = new Label();
             Titulo2Lgn = new Label();
             TituloIdEmpleadoLgn = new Label();
-            this.txtIdEmpleado = new TextBox();
+            txtIdEmpleado = new TextBox();
             TituloPassLgn = new Label();
             txtPassword = new TextBox();
             btnLogin = new Button();
@@ -71,11 +71,11 @@
             // 
             // txtIdEmpleado
             // 
-            this.txtIdEmpleado.Font = new Font("Arial", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            this.txtIdEmpleado.Location = new Point(265, 224);
-            this.txtIdEmpleado.Name = "txtIdEmpleado";
-            this.txtIdEmpleado.Size = new Size(272, 26);
-            this.txtIdEmpleado.TabIndex = 3;
+            txtIdEmpleado.Font = new Font("Arial", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            txtIdEmpleado.Location = new Point(265, 224);
+            txtIdEmpleado.Name = "txtIdEmpleado";
+            txtIdEmpleado.Size = new Size(272, 26);
+            txtIdEmpleado.TabIndex = 3;
             // 
             // TituloPassLgn
             // 
@@ -129,10 +129,11 @@
             Controls.Add(btnLogin);
             Controls.Add(txtPassword);
             Controls.Add(TituloPassLgn);
-            Controls.Add(this.txtIdEmpleado);
+            Controls.Add(txtIdEmpleado);
             Controls.Add(TituloIdEmpleadoLgn);
             Controls.Add(Titulo2Lgn);
             Controls.Add(Titulo1Lgn);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
             Name = "FrmLogin";
             Text = "FrmLogin";
             ResumeLayout(false);

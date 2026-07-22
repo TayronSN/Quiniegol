@@ -19,5 +19,34 @@ namespace Quiniegol.Forms
         {
 
         }
+
+        private void btnPronosticos_Click(object sender, EventArgs e)
+        {
+            FrmPronosticos frm = new FrmPronosticos();
+            frm.ShowDialog();
+        }
+
+        private void btnPartidos_Click(object sender, EventArgs e)
+        {
+            FrmPartidos frm = new FrmPartidos();
+            frm.ShowDialog();
+        }
+
+        private void btnRanking_Click(object sender, EventArgs e)
+        {
+            FrmRanking frm = new FrmRanking();
+            frm.ShowDialog();
+        }
+
+        private void btnReportes_Click(object sender, EventArgs e)
+        {
+            FrmReportes frm = new FrmReportes();
+            frm.ShowDialog();
+        }
+
+        private void btnCerrarSesion_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }

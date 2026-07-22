@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <None Remove="Data\usuarios.json" />
+    <None Remove="Forms\FrmPronosticos.resx~RF86f64b.TMP" />
   </ItemGroup>
 
   <ItemGroup>

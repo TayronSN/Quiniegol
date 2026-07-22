@@ -206,6 +206,7 @@
             Controls.Add(label2);
             Controls.Add(label1);
             Controls.Add(Titulo1Rgst);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
             Name = "FrmRegistro";
             Text = "FrmRegistro";
             ResumeLayout(false);
