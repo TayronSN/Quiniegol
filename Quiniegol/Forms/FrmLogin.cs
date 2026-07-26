@@ -6,6 +6,7 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using Quiniegol.Utils;
 
 namespace Quiniegol.Forms
 {
@@ -26,21 +27,29 @@ namespace Quiniegol.Forms
         {
             UsuarioController usuarioController = new UsuarioController();
 
-            string mensaje = usuarioController.IniciarSesion(txtIdEmpleado.Text,txtPassword.Text);
+            string mensaje = usuarioController.IniciarSesion(txtIdEmpleado.Text, txtPassword.Text);
 
-            if (string.IsNullOrEmpty(mensaje))
-            {
+            if(string.IsNullOrEmpty(mensaje))
+{
+                Sesion.IdEmpleado = txtIdEmpleado.Text;
+
                 MessageBox.Show("Inicio de sesion exitoso.");
 
                 FrmPrincipal frmPrincipal = new FrmPrincipal();
                 frmPrincipal.Show();
                 this.Hide();
             }
+
             else
             {
                 MessageBox.Show(mensaje);
             }
 
+
+        }
+
+        private void FrmLogin_Load(object sender, EventArgs e)
+        {
 
         }
     }

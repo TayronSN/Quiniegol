@@ -31,6 +31,36 @@ namespace Quiniegol.Controllers
             return "Partido registrado correctamente.";
         }
 
+        public string ActualizarPartido(Partido partido)
+        {
+            string mensaje = ValidarCamposObligatorios(partido);
+
+            if (!string.IsNullOrWhiteSpace(mensaje))
+            {
+                return mensaje;
+            }
+
+            mensaje = ValidarEquipos(partido);
+
+            if (!string.IsNullOrWhiteSpace(mensaje))
+            {
+                return mensaje;
+            }
+
+            if (!string.IsNullOrWhiteSpace(partido.Resultado))
+            {
+                partido.Estado = "Cerrado";
+            }
+            else
+            {
+                partido.Estado = "Abierto";
+            }
+
+            PartidosData.ActualizarPartido(partido);
+
+            return "Partido actualizado correctamente.";
+        }
+
         private string ValidarCamposObligatorios(Partido partido)
         {
             if (partido.IdEquipoLocal == 0)

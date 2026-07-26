@@ -1,0 +1,50 @@
+[
+  {
+    "IdPronostico": 1,
+    "IdEmpleado": "2",
+    "IdPartido": 7,
+    "ResultadoPronosticado": "Local"
+  },
+  {
+    "IdPronostico": 2,
+    "IdEmpleado": "2",
+    "IdPartido": 10,
+    "ResultadoPronosticado": "Local"
+  },
+  {
+    "IdPronostico": 3,
+    "IdEmpleado": "2",
+    "IdPartido": 12,
+    "ResultadoPronosticado": "Empate"
+  },
+  {
+    "IdPronostico": 4,
+    "IdEmpleado": "3",
+    "IdPartido": 7,
+    "ResultadoPronosticado": "Local"
+  },
+  {
+    "IdPronostico": 5,
+    "IdEmpleado": "3",
+    "IdPartido": 8,
+    "ResultadoPronosticado": "Local"
+  },
+  {
+    "IdPronostico": 6,
+    "IdEmpleado": "3",
+    "IdPartido": 9,
+    "ResultadoPronosticado": "Local"
+  },
+  {
+    "IdPronostico": 7,
+    "IdEmpleado": "3",
+    "IdPartido": 10,
+    "ResultadoPronosticado": "Local"
+  },
+  {
+    "IdPronostico": 8,
+    "IdEmpleado": "3",
+    "IdPartido": 11,
+    "ResultadoPronosticado": "Visitante"
+  }
+]
