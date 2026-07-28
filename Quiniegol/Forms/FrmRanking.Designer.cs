@@ -33,6 +33,7 @@
             Posición = new DataGridViewTextBoxColumn();
             Empleado = new DataGridViewTextBoxColumn();
             Puntos = new DataGridViewTextBoxColumn();
+            btnDescargarRanking = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvRanking).BeginInit();
             SuspendLayout();
             // 
@@ -44,7 +45,7 @@
             dgvRanking.BackgroundColor = SystemColors.Menu;
             dgvRanking.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvRanking.Columns.AddRange(new DataGridViewColumn[] { Posición, Empleado, Puntos });
-            dgvRanking.Location = new Point(363, 12);
+            dgvRanking.Location = new Point(349, 12);
             dgvRanking.MultiSelect = false;
             dgvRanking.Name = "dgvRanking";
             dgvRanking.ReadOnly = true;
@@ -70,6 +71,16 @@
             Puntos.Name = "Puntos";
             Puntos.ReadOnly = true;
             // 
+            // btnDescargarRanking
+            // 
+            btnDescargarRanking.Location = new Point(40, 207);
+            btnDescargarRanking.Name = "btnDescargarRanking";
+            btnDescargarRanking.Size = new Size(138, 50);
+            btnDescargarRanking.TabIndex = 1;
+            btnDescargarRanking.Text = "Descargar Ranking";
+            btnDescargarRanking.UseVisualStyleBackColor = true;
+            btnDescargarRanking.Click += btnDescargarRanking_Click;
+            // 
             // FrmRanking
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -77,6 +88,7 @@
             BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(768, 494);
+            Controls.Add(btnDescargarRanking);
             Controls.Add(dgvRanking);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Name = "FrmRanking";
@@ -92,5 +104,6 @@
         private DataGridViewTextBoxColumn Posición;
         private DataGridViewTextBoxColumn Empleado;
         private DataGridViewTextBoxColumn Puntos;
+        private Button btnDescargarRanking;
     }
 }

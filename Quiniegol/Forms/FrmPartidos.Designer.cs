@@ -36,7 +36,6 @@
             btnGuardar = new Button();
             btnActualizar = new Button();
             btnEliminar = new Button();
-            btnLimpiar = new Button();
             dgvPartidos = new DataGridView();
             label1 = new Label();
             label2 = new Label();
@@ -113,15 +112,6 @@
             btnEliminar.Text = "Eliminar";
             btnEliminar.UseVisualStyleBackColor = true;
             btnEliminar.Click += btnEliminar_Click;
-            // 
-            // btnLimpiar
-            // 
-            btnLimpiar.Location = new Point(621, 180);
-            btnLimpiar.Name = "btnLimpiar";
-            btnLimpiar.Size = new Size(147, 23);
-            btnLimpiar.TabIndex = 7;
-            btnLimpiar.Text = "Limpiar";
-            btnLimpiar.UseVisualStyleBackColor = true;
             // 
             // dgvPartidos
             // 
@@ -212,7 +202,6 @@
             Controls.Add(label2);
             Controls.Add(label1);
             Controls.Add(dgvPartidos);
-            Controls.Add(btnLimpiar);
             Controls.Add(btnEliminar);
             Controls.Add(btnActualizar);
             Controls.Add(btnGuardar);
