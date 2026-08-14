@@ -45,5 +45,10 @@ namespace Quiniegol.Forms
             }
 
         }
+
+        private void FrmRegistro_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

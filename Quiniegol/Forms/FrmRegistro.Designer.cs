@@ -209,6 +209,7 @@
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Name = "FrmRegistro";
             Text = "FrmRegistro";
+            Load += FrmRegistro_Load;
             ResumeLayout(false);
             PerformLayout();
         }

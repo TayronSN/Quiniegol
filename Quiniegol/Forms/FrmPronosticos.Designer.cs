@@ -41,7 +41,6 @@
             rdbEmpate = new RadioButton();
             rdbLocal = new RadioButton();
             btnGuardar = new Button();
-            btnLimpiar = new Button();
             dgvPronosticos = new DataGridView();
             Partido = new DataGridViewTextBoxColumn();
             Pronostico = new DataGridViewTextBoxColumn();
@@ -167,7 +166,7 @@
             // btnGuardar
             // 
             btnGuardar.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            btnGuardar.Location = new Point(121, 434);
+            btnGuardar.Location = new Point(209, 431);
             btnGuardar.Name = "btnGuardar";
             btnGuardar.Size = new Size(119, 42);
             btnGuardar.TabIndex = 8;
@@ -175,23 +174,15 @@
             btnGuardar.UseVisualStyleBackColor = true;
             btnGuardar.Click += btnGuardar_Click;
             // 
-            // btnLimpiar
-            // 
-            btnLimpiar.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            btnLimpiar.Location = new Point(276, 434);
-            btnLimpiar.Name = "btnLimpiar";
-            btnLimpiar.Size = new Size(125, 42);
-            btnLimpiar.TabIndex = 9;
-            btnLimpiar.Text = "Limpiar";
-            btnLimpiar.UseVisualStyleBackColor = true;
-            // 
             // dgvPronosticos
             // 
+            dgvPronosticos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvPronosticos.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             dgvPronosticos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvPronosticos.Columns.AddRange(new DataGridViewColumn[] { Partido, Pronostico, Estado });
-            dgvPronosticos.Location = new Point(464, 176);
+            dgvPronosticos.Location = new Point(467, 96);
             dgvPronosticos.Name = "dgvPronosticos";
-            dgvPronosticos.Size = new Size(343, 180);
+            dgvPronosticos.Size = new Size(396, 293);
             dgvPronosticos.TabIndex = 10;
             // 
             // Partido
@@ -217,7 +208,6 @@
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(930, 550);
             Controls.Add(dgvPronosticos);
-            Controls.Add(btnLimpiar);
             Controls.Add(btnGuardar);
             Controls.Add(grpResultado);
             Controls.Add(label1);
@@ -254,7 +244,6 @@
         private RadioButton rdbEmpate;
         private RadioButton rdbLocal;
         private Button btnGuardar;
-        private Button btnLimpiar;
         private DataGridView dgvPronosticos;
         private DataGridViewTextBoxColumn Partido;
         private DataGridViewTextBoxColumn Pronostico;

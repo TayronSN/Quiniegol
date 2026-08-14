@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using Quiniegol.Utils;
+using Quiniegol.Models;
 
 namespace Quiniegol.Forms
 {
@@ -29,20 +30,27 @@ namespace Quiniegol.Forms
 
             string mensaje = usuarioController.IniciarSesion(txtIdEmpleado.Text, txtPassword.Text);
 
-            if(string.IsNullOrEmpty(mensaje))
-{
-                Sesion.IdEmpleado = txtIdEmpleado.Text;
+            if (string.IsNullOrEmpty(mensaje))
+            {
+                Usuario usuario = usuarioController.ObtenerUsuario(txtIdEmpleado.Text);
+
+                Sesion.IdEmpleado = usuario.IdEmpleado;
 
                 MessageBox.Show("Inicio de sesion exitoso.");
 
-                FrmPrincipal frmPrincipal = new FrmPrincipal();
-                frmPrincipal.Show();
-                this.Hide();
-            }
+                if (usuario.IdRol == 1)
+                {
+                    FrmPrincipal frmPrincipal = new FrmPrincipal();
+                    frmPrincipal.Show();
+                }
 
-            else
-            {
-                MessageBox.Show(mensaje);
+                else
+                {
+                    FrmPrincipalUsuario frmPrincipalUsuario = new FrmPrincipalUsuario();
+                    frmPrincipalUsuario.Show();
+                }
+
+                this.Hide();
             }
 
 

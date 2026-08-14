@@ -227,6 +227,11 @@ namespace Quiniegol.Controllers
             return "";
         }
 
+        public Usuario? ObtenerUsuario(string idEmpleado)
+        {
+            return UsuariosData.BuscarPorIdEmpleado(idEmpleado);
+        }
+
 
     }
 }
