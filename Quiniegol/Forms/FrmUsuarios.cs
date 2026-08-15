@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using Quiniegol.Data;
-using Quiniegol.Models;
+using Quiniegol.Core.Models;
 using Quiniegol.Utils;
 
 namespace Quiniegol.Forms

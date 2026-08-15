@@ -1,4 +1,4 @@
-﻿using Quiniegol.Models;
+﻿using Quiniegol.Core.Models;
 using Quiniegol.Controllers;
 using System;
 using System.Collections.Generic;

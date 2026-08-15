@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Quiniegol.Models
 {
-    internal class Ranking
+    internal class xRanking
     {
         public string IdEmpleado { get; set; }
 

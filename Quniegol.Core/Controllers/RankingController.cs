@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 
-namespace Quiniegol.Controllers
+namespace Quiniegol.Core.Controllers
 {
-    internal class RankingController
+    public class RankingController
     {
 
         public List<Ranking> GenerarRanking()

@@ -1,4 +1,4 @@
-﻿using Quiniegol.Data;
+﻿using Quiniegol.Core.Data;
 using Quiniegol.Core.Models;
 using System;
 using System.Collections.Generic;
@@ -7,9 +7,9 @@ using System.Text;
 using System.Text.Json;
 using System.Net.Mail;
 
-namespace Quiniegol.Controllers
+namespace Quiniegol.Core.Controllers
 {
-    internal class UsuarioController
+    public class UsuarioController
     {
 
         public string RegistrarUsuario(Usuario usuario, string confirmarPassword)

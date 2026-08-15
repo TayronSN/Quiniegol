@@ -1,4 +1,5 @@
 <Solution>
   <Project Path="../../../Proyecto#2/Quiniegol-v2/src/Quniegol.Web/Quniegol.Web.csproj" Id="11e9add7-834c-49fe-bbea-b6b14fb6d60c" />
+  <Project Path="../Quniegol.Core/Quniegol.Core.csproj" Id="11be74e6-b0db-426a-99f2-dd160b75dc2d" />
   <Project Path="Quiniegol.csproj" />
 </Solution>

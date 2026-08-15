@@ -7,7 +7,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using Quiniegol.Utils;
-using Quiniegol.Models;
+using Quiniegol.Core.Models;
 
 namespace Quiniegol.Forms
 {
