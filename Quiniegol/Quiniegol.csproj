@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Quniegol.Core\Quniegol.Core.csproj" />
+    <ProjectReference Include="..\..\..\Proyecto#2\Quiniegol-v2\src\Quiniegol.Core\Quiniegol.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>
