@@ -6,5 +6,8 @@ Tayron Salas Núñez
 Repositorio GitHub:
 https://github.com/TayronSN/Quiniegol.git
 
+Proyecto Web Trello:
+https://trello.com/b/SaVUdD8G/%F0%9F%9A%80-quiniegol-v2-iteracion-2
+
 Proyecto Jira:
 https://tayronsalas.atlassian.net/jira/software/projects/QP1TS/summary?atlOrigin=eyJpIjoiOGFhYTUwNTQ1MDRiNGI3YThlNjI4MGYxODU3MWRkYzgiLCJwIjoiaiJ9

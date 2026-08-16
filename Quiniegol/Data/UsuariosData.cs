@@ -1,4 +1,4 @@
-﻿using Quiniegol.Models;
+﻿using Quiniegol.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,7 +12,7 @@ namespace Quiniegol.Data
     internal class UsuariosData
     {
         
-        private static readonly string rutaArchivo = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\Data\usuarios.json"));
+        private static readonly string rutaArchivo = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\..\Quiniegol\Data\usuarios.json"));
         public static List<Usuario> LeerUsuarios()
 
         {

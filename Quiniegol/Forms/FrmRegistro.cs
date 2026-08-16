@@ -1,5 +1,5 @@
-﻿using Quiniegol.Models;
-using Quiniegol.Controllers;
+﻿using Quiniegol.Core.Models;
+using Quiniegol.Core.Controllers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -43,6 +43,11 @@ namespace Quiniegol.Forms
             {
                 MessageBox.Show(mensaje);
             }
+
+        }
+
+        private void FrmRegistro_Load(object sender, EventArgs e)
+        {
 
         }
     }

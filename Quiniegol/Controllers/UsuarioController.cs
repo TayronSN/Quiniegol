@@ -1,5 +1,5 @@
 ﻿using Quiniegol.Data;
-using Quiniegol.Models;
+using Quiniegol.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -225,6 +225,11 @@ namespace Quiniegol.Controllers
             }
 
             return "";
+        }
+
+        public Usuario? ObtenerUsuario(string idEmpleado)
+        {
+            return UsuariosData.BuscarPorIdEmpleado(idEmpleado);
         }
 
 

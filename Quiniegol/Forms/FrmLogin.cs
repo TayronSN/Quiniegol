@@ -1,4 +1,4 @@
-﻿using Quiniegol.Controllers;
+﻿using Quiniegol.Core.Controllers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -6,6 +6,8 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using Quiniegol.Utils;
+using Quiniegol.Core.Models;
 
 namespace Quiniegol.Forms
 {
@@ -26,21 +28,36 @@ namespace Quiniegol.Forms
         {
             UsuarioController usuarioController = new UsuarioController();
 
-            string mensaje = usuarioController.IniciarSesion(txtIdEmpleado.Text,txtPassword.Text);
+            string mensaje = usuarioController.IniciarSesion(txtIdEmpleado.Text, txtPassword.Text);
 
             if (string.IsNullOrEmpty(mensaje))
             {
+                Usuario usuario = usuarioController.ObtenerUsuario(txtIdEmpleado.Text);
+
+                Sesion.IdEmpleado = usuario.IdEmpleado;
+
                 MessageBox.Show("Inicio de sesion exitoso.");
 
-                FrmPrincipal frmPrincipal = new FrmPrincipal();
-                frmPrincipal.Show();
+                if (usuario.IdRol == 1)
+                {
+                    FrmPrincipal frmPrincipal = new FrmPrincipal();
+                    frmPrincipal.Show();
+                }
+
+                else
+                {
+                    FrmPrincipalUsuario frmPrincipalUsuario = new FrmPrincipalUsuario();
+                    frmPrincipalUsuario.Show();
+                }
+
                 this.Hide();
             }
-            else
-            {
-                MessageBox.Show(mensaje);
-            }
 
+
+        }
+
+        private void FrmLogin_Load(object sender, EventArgs e)
+        {
 
         }
     }

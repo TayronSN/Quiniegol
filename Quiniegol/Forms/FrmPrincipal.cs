@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Quiniegol.Utils;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -38,15 +39,26 @@ namespace Quiniegol.Forms
             frm.ShowDialog();
         }
 
-        private void btnReportes_Click(object sender, EventArgs e)
-        {
-            FrmReportes frm = new FrmReportes();
-            frm.ShowDialog();
-        }
-
+        //private void btnReportes_Click(object sender, EventArgs e)
+        //{
+        //    FrmReportes frm = new FrmReportes();
+        //    frm.ShowDialog();
+        //}   se elimina este metodo porque al final no aporta nada y se simplifica
+        
         private void btnCerrarSesion_Click(object sender, EventArgs e)
         {
+            Sesion.IdEmpleado = "";
+
+            FrmLogin frmLogin = new FrmLogin();
+            frmLogin.Show();
+
             this.Close();
+        }
+
+        private void btnUsuarios_Click(object sender, EventArgs e)
+        {
+            FrmUsuarios frmUsuarios = new FrmUsuarios();
+            frmUsuarios.ShowDialog();
         }
     }
 }

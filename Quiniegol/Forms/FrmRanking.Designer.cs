@@ -29,7 +29,57 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmRanking));
+            dgvRanking = new DataGridView();
+            Posición = new DataGridViewTextBoxColumn();
+            Empleado = new DataGridViewTextBoxColumn();
+            Puntos = new DataGridViewTextBoxColumn();
+            btnDescargarRanking = new Button();
+            ((System.ComponentModel.ISupportInitialize)dgvRanking).BeginInit();
             SuspendLayout();
+            // 
+            // dgvRanking
+            // 
+            dgvRanking.AllowUserToAddRows = false;
+            dgvRanking.AllowUserToDeleteRows = false;
+            dgvRanking.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvRanking.BackgroundColor = SystemColors.Menu;
+            dgvRanking.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvRanking.Columns.AddRange(new DataGridViewColumn[] { Posición, Empleado, Puntos });
+            dgvRanking.Location = new Point(349, 12);
+            dgvRanking.MultiSelect = false;
+            dgvRanking.Name = "dgvRanking";
+            dgvRanking.ReadOnly = true;
+            dgvRanking.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvRanking.Size = new Size(376, 451);
+            dgvRanking.TabIndex = 0;
+            // 
+            // Posición
+            // 
+            Posición.HeaderText = "Posición";
+            Posición.Name = "Posición";
+            Posición.ReadOnly = true;
+            // 
+            // Empleado
+            // 
+            Empleado.HeaderText = "Empleado";
+            Empleado.Name = "Empleado";
+            Empleado.ReadOnly = true;
+            // 
+            // Puntos
+            // 
+            Puntos.HeaderText = "Puntos";
+            Puntos.Name = "Puntos";
+            Puntos.ReadOnly = true;
+            // 
+            // btnDescargarRanking
+            // 
+            btnDescargarRanking.Location = new Point(40, 207);
+            btnDescargarRanking.Name = "btnDescargarRanking";
+            btnDescargarRanking.Size = new Size(138, 50);
+            btnDescargarRanking.TabIndex = 1;
+            btnDescargarRanking.Text = "Descargar Ranking";
+            btnDescargarRanking.UseVisualStyleBackColor = true;
+            btnDescargarRanking.Click += btnDescargarRanking_Click;
             // 
             // FrmRanking
             // 
@@ -37,13 +87,23 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
             BackgroundImageLayout = ImageLayout.Stretch;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(768, 494);
+            Controls.Add(btnDescargarRanking);
+            Controls.Add(dgvRanking);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Name = "FrmRanking";
             Text = "FrmRanking";
+            Load += FrmRanking_Load;
+            ((System.ComponentModel.ISupportInitialize)dgvRanking).EndInit();
             ResumeLayout(false);
         }
 
         #endregion
+
+        private DataGridView dgvRanking;
+        private DataGridViewTextBoxColumn Posición;
+        private DataGridViewTextBoxColumn Empleado;
+        private DataGridViewTextBoxColumn Puntos;
+        private Button btnDescargarRanking;
     }
 }
