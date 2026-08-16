@@ -1,6 +1,11 @@
 ﻿using Quiniegol.Core.Data;
 using Quiniegol.Core.Models;
 using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Text.Json;
+using System.IO;
+using System.Net.Mail;
 
 namespace Quiniegol.Core.Controllers
 {

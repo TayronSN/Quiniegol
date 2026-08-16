@@ -1,5 +1,5 @@
 ﻿using Quiniegol.Core.Models;
-using Quiniegol.Controllers;
+using Quiniegol.Core.Controllers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

@@ -1,6 +1,6 @@
-﻿using Quiniegol.Controllers;
-using Quiniegol.Data;
-using Quiniegol.Models;
+﻿using Quiniegol.Core.Controllers;
+using Quiniegol.Core.Data;
+using Quiniegol.Core.Models;
 using Quiniegol.Utils;
 using System;
 using System.Collections.Generic;

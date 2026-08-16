@@ -5,7 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using Quiniegol.Data;
+using Quiniegol.Core.Data;
 using Quiniegol.Core.Models;
 using Quiniegol.Utils;
 
