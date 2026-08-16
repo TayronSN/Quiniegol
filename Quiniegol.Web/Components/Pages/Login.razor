@@ -1,0 +1,46 @@
+﻿@page "/"
+@page "/login"
+@rendermode InteractiveServer
+@using Quiniegol.Core.Controllers;
+@inject NavigationManager Navigation
+
+<h3>Iniciar sesión</h3>
+
+<div>
+    <label>ID del empleado</label>
+    <input @bind="idEmpleado" />
+</div>
+
+<div>
+    <label>Contraseña</label>
+    <input type="password" @bind="password" />
+</div>
+
+<br />
+
+<button @onclick="IniciarSesion">Iniciar sesión</button>
+
+<button @onclick="IrARegistro">Registrar usuario</button>
+
+<p>@mensaje</p>
+
+@code {
+    private string idEmpleado = "";
+    private string password = "";
+    private string mensaje = "";
+
+    private void IniciarSesion()
+    {   
+        //Test de boton
+        //mensaje = "El botón funciona";
+
+        UsuarioController usuarioController = new UsuarioController();
+
+        mensaje = usuarioController.IniciarSesion(idEmpleado, password);
+    }
+
+    private void IrARegistro()
+    {
+        Navigation.NavigateTo("/registro");
+    }
+}
