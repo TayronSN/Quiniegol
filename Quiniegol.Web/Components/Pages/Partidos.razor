@@ -1,0 +1,231 @@
+﻿@page "/partidos"
+@rendermode InteractiveServer
+
+@using Quiniegol.Core.Models
+@using Quiniegol.Core.Data
+@using Quiniegol.Core.Controllers
+@using Quiniegol.Core.Utils
+
+<h3>Partidos</h3>
+
+@if (!Sesion.InicioSesion)
+{
+    <p>Sesion no iniciada.</p>
+}
+else if (!Sesion.EsAdmin)
+{
+    <p>No tiene permisos para acceder a esta página.</p>
+}
+else
+{
+    <h4>Partidos registrados</h4>
+
+    @if (partidos.Count == 0)
+    {
+        <p>No hay partidos registrados.</p>
+    }
+    else
+    {
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Local</th>
+                    <th>Visitante</th>
+                    <th>Fase</th>
+                    <th>Estado</th>
+                    <th>Resultado</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (Partido partido in partidos)
+                {
+                    Equipo? equipoLocal =
+                        EquiposData.BuscarPorId(partido.IdEquipoLocal);
+
+                    Equipo? equipoVisitante =
+                        EquiposData.BuscarPorId(partido.IdEquipoVisitante);
+
+                    <tr>
+                        <td>@partido.IdPartido</td>
+                        <td>@equipoLocal?.Nombre</td>
+                        <td>@equipoVisitante?.Nombre</td>
+                        <td>@partido.Fase</td>
+                        <td>@partido.Estado</td>
+                        <td>@partido.Resultado</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+    <br />
+
+    <h4>Registrar partido</h4>
+
+    <div>
+        <label>Equipo local</label>
+
+        <select @bind="nuevoPartido.IdEquipoLocal">
+            <option value="0">Seleccione un equipo</option>
+
+            @foreach (Equipo equipo in equipos)
+            {
+                <option value="@equipo.IdEquipo">
+                    @equipo.Nombre
+                </option>
+            }
+        </select>
+    </div>
+
+    <br />
+
+    <div>
+        <label>Equipo visitante</label>
+
+        <select @bind="nuevoPartido.IdEquipoVisitante">
+            <option value="0">Seleccione un equipo</option>
+
+            @foreach (Equipo equipo in equipos)
+            {
+                <option value="@equipo.IdEquipo">
+                    @equipo.Nombre
+                </option>
+            }
+        </select>
+    </div>
+
+    <br />
+
+    <div>
+        <label>Fase</label>
+
+        <select @bind="nuevoPartido.Fase">
+            <option value="">Seleccione una fase</option>
+            <option value="Grupos">Grupos</option>
+        </select>
+    </div>
+
+    <br />
+
+    <button @onclick="RegistrarPartido">
+        Registrar partido
+    </button>
+
+    <br />
+
+    <h4>Actualizar partido</h4>
+
+    <div>
+        <label>Partido</label>
+
+        <select @bind="idPartidoSeleccionado">
+            <option value="0">Seleccione un partido</option>
+
+            @foreach (Partido partido in partidos)
+            {
+                Equipo? equipoLocal =
+                    EquiposData.BuscarPorId(partido.IdEquipoLocal);
+
+                Equipo? equipoVisitante =
+                    EquiposData.BuscarPorId(partido.IdEquipoVisitante);
+
+                <option value="@partido.IdPartido">
+                    @equipoLocal?.Nombre vs @equipoVisitante?.Nombre
+                </option>
+            }
+        </select>
+    </div>
+
+    <br />
+
+    <div>
+        <label>Resultado</label>
+
+        <select @bind="resultadoSeleccionado">
+            <option value="">Seleccione un resultado</option>
+            <option value="Local">Local</option>
+            <option value="Empate">Empate</option>
+            <option value="Visitante">Visitante</option>
+        </select>
+    </div>
+
+    <br />
+
+    <button @onclick="ActualizarPartido">
+        Actualizar partido
+    </button>
+
+    <p>@mensaje</p>
+}
+
+@code {
+    private List<Partido> partidos = new List<Partido>();
+
+    private List<Equipo> equipos = new List<Equipo>();
+
+    private Partido nuevoPartido = new Partido();
+
+    private int idPartidoSeleccionado;
+
+    private string resultadoSeleccionado = "";
+
+    private string mensaje = "";
+
+    protected override void OnInitialized()
+    {
+        partidos = PartidosData.LeerPartidos();
+
+        equipos = EquiposData.LeerEquipos();
+    }
+
+    private void RegistrarPartido()
+    {
+        PartidoController partidoController =
+            new PartidoController();
+
+        string resultado =
+            partidoController.RegistrarPartido(nuevoPartido);
+
+        mensaje = resultado;
+
+        if (resultado == "Partido registrado correctamente.")
+        {
+            partidos = PartidosData.LeerPartidos();
+
+            nuevoPartido = new Partido();
+        }
+    }
+
+    private void ActualizarPartido()
+    {
+        Partido? partido =
+            PartidosData.BuscarPorId(idPartidoSeleccionado);
+
+        if (partido == null)
+        {
+            mensaje = "Seleccione un partido";
+            return;
+        }
+
+        partido.Resultado = resultadoSeleccionado;
+
+        PartidoController partidoController =
+            new PartidoController();
+
+        string resultado =
+            partidoController.ActualizarPartido(partido);
+
+        mensaje = resultado;
+
+        if (resultado == "Partido actualizado correctamente.")
+        {
+            partidos = PartidosData.LeerPartidos();
+
+            idPartidoSeleccionado = 0;
+
+            resultadoSeleccionado = "";
+        }
+    }
+}

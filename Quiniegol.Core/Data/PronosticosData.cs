@@ -9,7 +9,7 @@ namespace Quiniegol.Core.Data
 {
     public class PronosticosData
     {
-        private static readonly string rutaArchivo = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,@"..\..\..\Data\pronosticos.json"));
+        private static readonly string rutaArchivo = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\..\Quiniegol.Core\Data\pronosticos.json"));
 
         public static List<Pronostico> LeerPronosticos()
         {

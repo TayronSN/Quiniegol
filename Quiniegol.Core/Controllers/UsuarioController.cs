@@ -197,7 +197,7 @@ namespace Quiniegol.Core.Controllers
                 return "La contraseña es incorrecta";
             }
 
-            return "Inicio de sesión exitoso";
+            return "";
         }
 
         public Usuario? ObtenerUsuario(string idEmpleado)

@@ -1,8 +1,12 @@
 ﻿@page "/"
 @page "/login"
 @rendermode InteractiveServer
-@using Quiniegol.Core.Controllers;
 @inject NavigationManager Navigation
+@using Quiniegol.Core.Utils
+@using Quiniegol.Core.Models
+@using Quiniegol.Core.Data
+@using Quiniegol.Core.Controllers
+
 
 <h3>Iniciar sesión</h3>
 
@@ -31,12 +35,37 @@
 
     private void IniciarSesion()
     {   
-        //Test de boton
-        //mensaje = "El botón funciona";
-
+        
         UsuarioController usuarioController = new UsuarioController();
 
-        mensaje = usuarioController.IniciarSesion(idEmpleado, password);
+        string resultado = usuarioController.IniciarSesion(idEmpleado, password);
+
+        if (!string.IsNullOrEmpty(resultado))
+        {
+            mensaje = resultado;
+            return;
+        }
+
+        Usuario? usuario = UsuariosData.BuscarPorIdEmpleado(idEmpleado);
+
+        mensaje = $"Sesión iniciada. Usuario: {usuario.Nombre}, Rol: {usuario.IdRol}";
+
+        if (usuario == null)
+        {
+            mensaje = "No se pudo obtener la información del usuario";
+            return;
+        }
+
+        Sesion.Iniciar(usuario);
+
+        if (usuario.IdRol == 1)
+        {
+            Navigation.NavigateTo("/principal");
+        }
+        else if (usuario.IdRol == 2)
+        {
+            Navigation.NavigateTo("/principal-usuario");
+        }
     }
 
     private void IrARegistro()

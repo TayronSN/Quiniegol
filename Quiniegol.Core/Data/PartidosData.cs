@@ -8,12 +8,7 @@ namespace Quiniegol.Core.Data
 {
     public class PartidosData
     {
-        public static readonly string rutaArchivo = Path.GetFullPath(
-            Path.Combine(
-                AppDomain.CurrentDomain.BaseDirectory,
-                @"..\..\..\Data\partidos.json"
-            )
-        );
+        public static readonly string rutaArchivo = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\..\Quiniegol.Core\Data\partidos.json"));
 
         public static List<Partido> LeerPartidos()
         {

@@ -8,12 +8,7 @@ namespace Quiniegol.Core.Data
 {
     public class EquiposData
     {
-        private static readonly string rutaArchivo = Path.GetFullPath(
-            Path.Combine(
-                AppDomain.CurrentDomain.BaseDirectory,
-                @"..\..\..\Data\equipos.json"
-            )
-        );
+        private static readonly string rutaArchivo = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\..\Quiniegol.Core\Data\equipos.json"));
 
         public static void InicializarEquipos()
         {
