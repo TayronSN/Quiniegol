@@ -1,0 +1,46 @@
+﻿@page "/principal"
+@rendermode InteractiveServer
+@using Quiniegol.Core.Utils
+@inject NavigationManager Navigation
+
+<h3>Principal - Administrador</h3>
+
+@if (!Sesion.InicioSesion)
+{
+    <p>Sesion no iniciada.</p>
+}
+else if (!Sesion.EsAdmin)
+{
+    <p>No tiene permisos para acceder a esta página, favor contacte al administrador.</p>
+}
+else
+{
+    <p>Bienvenido, @Sesion.UsuarioActual!.Nombre</p>
+
+    <button @onclick="IrPartidos">Partidos</button>
+    <button @onclick="IrUsuarios">Usuarios</button>
+    <button @onclick="IrPronosticos">Pronósticos</button>
+    <button @onclick="IrRanking">Ranking</button>
+}
+
+@code {
+    private void IrPartidos()
+    {
+        Navigation.NavigateTo("/partidos");
+    }
+
+    private void IrUsuarios()
+    {
+        Navigation.NavigateTo("/usuarios");
+    }
+
+    private void IrPronosticos()
+    {
+        Navigation.NavigateTo("/pronosticos");
+    }
+
+    private void IrRanking()
+    {
+        Navigation.NavigateTo("/ranking");
+    }
+}

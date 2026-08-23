@@ -1,0 +1,75 @@
+﻿@page "/"
+@page "/login"
+@rendermode InteractiveServer
+@inject NavigationManager Navigation
+@using Quiniegol.Core.Utils
+@using Quiniegol.Core.Models
+@using Quiniegol.Core.Data
+@using Quiniegol.Core.Controllers
+
+
+<h3>Iniciar sesión</h3>
+
+<div>
+    <label>ID del empleado</label>
+    <input @bind="idEmpleado" />
+</div>
+
+<div>
+    <label>Contraseña</label>
+    <input type="password" @bind="password" />
+</div>
+
+<br />
+
+<button @onclick="IniciarSesion">Iniciar sesión</button>
+
+<button @onclick="IrARegistro">Registrar usuario</button>
+
+<p>@mensaje</p>
+
+@code {
+    private string idEmpleado = "";
+    private string password = "";
+    private string mensaje = "";
+
+    private void IniciarSesion()
+    {   
+        
+        UsuarioController usuarioController = new UsuarioController();
+
+        string resultado = usuarioController.IniciarSesion(idEmpleado, password);
+
+        if (!string.IsNullOrEmpty(resultado))
+        {
+            mensaje = resultado;
+            return;
+        }
+
+        Usuario? usuario = UsuariosData.BuscarPorIdEmpleado(idEmpleado);
+
+        mensaje = $"Sesión iniciada. Usuario: {usuario.Nombre}, Rol: {usuario.IdRol}";
+
+        if (usuario == null)
+        {
+            mensaje = "No se pudo obtener la información del usuario";
+            return;
+        }
+
+        Sesion.Iniciar(usuario);
+
+        if (usuario.IdRol == 1)
+        {
+            Navigation.NavigateTo("/principal");
+        }
+        else if (usuario.IdRol == 2)
+        {
+            Navigation.NavigateTo("/principal-usuario");
+        }
+    }
+
+    private void IrARegistro()
+    {
+        Navigation.NavigateTo("/registro");
+    }
+}

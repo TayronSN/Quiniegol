@@ -1,0 +1,290 @@
+[
+  {
+    "IdEquipo": 1,
+    "Nombre": "Mexico",
+    "Grupo": "A",
+    "Bandera": "Resources/Banderas/mexico.png"
+  },
+  {
+    "IdEquipo": 2,
+    "Nombre": "Sudafrica",
+    "Grupo": "A",
+    "Bandera": "Resources/Banderas/sudafrica.png"
+  },
+  {
+    "IdEquipo": 3,
+    "Nombre": "Republica de Corea",
+    "Grupo": "A",
+    "Bandera": "Resources/Banderas/republicadecorea.png"
+  },
+  {
+    "IdEquipo": 4,
+    "Nombre": "Chequia",
+    "Grupo": "A",
+    "Bandera": "Resources/Banderas/chequia.png"
+  },
+  {
+    "IdEquipo": 5,
+    "Nombre": "Canada",
+    "Grupo": "B",
+    "Bandera": "Resources/Banderas/canada.png"
+  },
+  {
+    "IdEquipo": 6,
+    "Nombre": "Bosnia y Herzegovina",
+    "Grupo": "B",
+    "Bandera": "Resources/Banderas/bosnia.png"
+  },
+  {
+    "IdEquipo": 7,
+    "Nombre": "Catar",
+    "Grupo": "B",
+    "Bandera": "Resources/Banderas/catar.png"
+  },
+  {
+    "IdEquipo": 8,
+    "Nombre": "Suiza",
+    "Grupo": "B",
+    "Bandera": "Resources/Banderas/suiza.png"
+  },
+  {
+    "IdEquipo": 9,
+    "Nombre": "Brasil",
+    "Grupo": "C",
+    "Bandera": "Resources/Banderas/brasil.png"
+  },
+  {
+    "IdEquipo": 10,
+    "Nombre": "Marruecos",
+    "Grupo": "C",
+    "Bandera": "Resources/Banderas/marruecos.png"
+  },
+  {
+    "IdEquipo": 11,
+    "Nombre": "Haiti",
+    "Grupo": "C",
+    "Bandera": "Resources/Banderas/haiti.png"
+  },
+  {
+    "IdEquipo": 12,
+    "Nombre": "Escocia",
+    "Grupo": "C",
+    "Bandera": "Resources/Banderas/escocia.png"
+  },
+  {
+    "IdEquipo": 13,
+    "Nombre": "Estados Unidos",
+    "Grupo": "D",
+    "Bandera": "Resources/Banderas/estadosunidos.png"
+  },
+  {
+    "IdEquipo": 14,
+    "Nombre": "Paraguay",
+    "Grupo": "D",
+    "Bandera": "Resources/Banderas/paraguay.png"
+  },
+  {
+    "IdEquipo": 15,
+    "Nombre": "Australia",
+    "Grupo": "D",
+    "Bandera": "Resources/Banderas/australia.png"
+  },
+  {
+    "IdEquipo": 16,
+    "Nombre": "Turquia",
+    "Grupo": "D",
+    "Bandera": "Resources/Banderas/turquia.png"
+  },
+  {
+    "IdEquipo": 17,
+    "Nombre": "Alemania",
+    "Grupo": "E",
+    "Bandera": "Resources/Banderas/alemania.png"
+  },
+  {
+    "IdEquipo": 18,
+    "Nombre": "Curazao",
+    "Grupo": "E",
+    "Bandera": "Resources/Banderas/curazao.png"
+  },
+  {
+    "IdEquipo": 19,
+    "Nombre": "Costa de Marfil",
+    "Grupo": "E",
+    "Bandera": "Resources/Banderas/costademarfil.png"
+  },
+  {
+    "IdEquipo": 20,
+    "Nombre": "Ecuador",
+    "Grupo": "E",
+    "Bandera": "Resources/Banderas/ecuador.png"
+  },
+  {
+    "IdEquipo": 21,
+    "Nombre": "Paises Bajos",
+    "Grupo": "F",
+    "Bandera": "Resources/Banderas/paisesbajos.png"
+  },
+  {
+    "IdEquipo": 22,
+    "Nombre": "Japon",
+    "Grupo": "F",
+    "Bandera": "Resources/Banderas/japon.png"
+  },
+  {
+    "IdEquipo": 23,
+    "Nombre": "Suecia",
+    "Grupo": "F",
+    "Bandera": "Resources/Banderas/suecia.png"
+  },
+  {
+    "IdEquipo": 24,
+    "Nombre": "Tunez",
+    "Grupo": "F",
+    "Bandera": "Resources/Banderas/tunez.png"
+  },
+  {
+    "IdEquipo": 25,
+    "Nombre": "Belgica",
+    "Grupo": "G",
+    "Bandera": "Resources/Banderas/belgica.png"
+  },
+  {
+    "IdEquipo": 26,
+    "Nombre": "Egipto",
+    "Grupo": "G",
+    "Bandera": "Resources/Banderas/egipto.png"
+  },
+  {
+    "IdEquipo": 27,
+    "Nombre": "Ri de Iran",
+    "Grupo": "G",
+    "Bandera": "Resources/Banderas/iran.png"
+  },
+  {
+    "IdEquipo": 28,
+    "Nombre": "Nueva Zelanda",
+    "Grupo": "G",
+    "Bandera": "Resources/Banderas/nuevazelanda.png"
+  },
+  {
+    "IdEquipo": 29,
+    "Nombre": "Espa\u00F1a",
+    "Grupo": "H",
+    "Bandera": "Resources/Banderas/espana.png"
+  },
+  {
+    "IdEquipo": 30,
+    "Nombre": "Islas de Cabo Verde",
+    "Grupo": "H",
+    "Bandera": "Resources/Banderas/caboverde.png"
+  },
+  {
+    "IdEquipo": 31,
+    "Nombre": "Arabia Saudi",
+    "Grupo": "H",
+    "Bandera": "Resources/Banderas/arabiasaudita.png"
+  },
+  {
+    "IdEquipo": 32,
+    "Nombre": "Uruguay",
+    "Grupo": "H",
+    "Bandera": "Resources/Banderas/uruguay.png"
+  },
+  {
+    "IdEquipo": 33,
+    "Nombre": "Francia",
+    "Grupo": "I",
+    "Bandera": "Resources/Banderas/francia.png"
+  },
+  {
+    "IdEquipo": 34,
+    "Nombre": "Senegal",
+    "Grupo": "I",
+    "Bandera": "Resources/Banderas/senegal.png"
+  },
+  {
+    "IdEquipo": 35,
+    "Nombre": "Irak",
+    "Grupo": "I",
+    "Bandera": "Resources/Banderas/irak.png"
+  },
+  {
+    "IdEquipo": 36,
+    "Nombre": "Noruega",
+    "Grupo": "I",
+    "Bandera": "Resources/Banderas/noruega.png"
+  },
+  {
+    "IdEquipo": 37,
+    "Nombre": "Argentina",
+    "Grupo": "J",
+    "Bandera": "Resources/Banderas/argentina.png"
+  },
+  {
+    "IdEquipo": 38,
+    "Nombre": "Argelia",
+    "Grupo": "J",
+    "Bandera": "Resources/Banderas/argelia.png"
+  },
+  {
+    "IdEquipo": 39,
+    "Nombre": "Austria",
+    "Grupo": "J",
+    "Bandera": "Resources/Banderas/austria.png"
+  },
+  {
+    "IdEquipo": 40,
+    "Nombre": "Jordania",
+    "Grupo": "J",
+    "Bandera": "Resources/Banderas/jordania.png"
+  },
+  {
+    "IdEquipo": 41,
+    "Nombre": "Portugal",
+    "Grupo": "K",
+    "Bandera": "Resources/Banderas/portugal.png"
+  },
+  {
+    "IdEquipo": 42,
+    "Nombre": "RD Congo",
+    "Grupo": "K",
+    "Bandera": "Resources/Banderas/rdcongo.png"
+  },
+  {
+    "IdEquipo": 43,
+    "Nombre": "Uzbekistan",
+    "Grupo": "K",
+    "Bandera": "Resources/Banderas/uzbekistan.png"
+  },
+  {
+    "IdEquipo": 44,
+    "Nombre": "Colombia",
+    "Grupo": "K",
+    "Bandera": "Resources/Banderas/colombia.png"
+  },
+  {
+    "IdEquipo": 45,
+    "Nombre": "Inglaterra",
+    "Grupo": "L",
+    "Bandera": "Resources/Banderas/inglaterra.png"
+  },
+  {
+    "IdEquipo": 46,
+    "Nombre": "Croacia",
+    "Grupo": "L",
+    "Bandera": "Resources/Banderas/croacia.png"
+  },
+  {
+    "IdEquipo": 47,
+    "Nombre": "Ghana",
+    "Grupo": "L",
+    "Bandera": "Resources/Banderas/ghana.png"
+  },
+  {
+    "IdEquipo": 48,
+    "Nombre": "Panama",
+    "Grupo": "L",
+    "Bandera": "Resources/Banderas/panama.png"
+  }
+]

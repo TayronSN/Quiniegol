@@ -1,0 +1,33 @@
+﻿@page "/principal-usuario"
+@using Quiniegol.Core.Utils
+@inject NavigationManager Navigation
+
+<h3>Principal - Usuario</h3>
+
+@if (!Sesion.InicioSesion)
+{
+    <p>Debe iniciar sesión.</p>
+}
+else if (!Sesion.EsUser)
+{
+    <p>No tiene permisos para acceder a esta página.</p>
+}
+else
+{
+    <p>Bienvenido, @Sesion.UsuarioActual!.Nombre</p>
+
+    <button @onclick="IrPronosticos">Pronósticos</button>
+    <button @onclick="IrRanking">Ranking</button>
+}
+
+@code {
+    private void IrPronosticos()
+    {
+        Navigation.NavigateTo("/pronosticos");
+    }
+
+    private void IrRanking()
+    {
+        Navigation.NavigateTo("/ranking");
+    }
+}
