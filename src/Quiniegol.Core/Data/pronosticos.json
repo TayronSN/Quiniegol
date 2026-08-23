@@ -124,5 +124,11 @@
     "IdEmpleado": "2",
     "IdPartido": 16,
     "ResultadoPronosticado": "Local"
+  },
+  {
+    "IdPronostico": 22,
+    "IdEmpleado": "2",
+    "IdPartido": 18,
+    "ResultadoPronosticado": "Empate"
   }
 ]

@@ -1,5 +1,126 @@
-﻿<h3>Ranking</h3>
+﻿@page "/ranking"
+@rendermode InteractiveServer
+
+@using Quiniegol.Core.Controllers
+@using Quiniegol.Core.Data
+@using Quiniegol.Core.Models
+@using Quiniegol.Core.Utils
+
+<h3>Ranking</h3>
+
+@if (!Sesion.InicioSesion)
+{
+    <p>Debe iniciar sesión.</p>
+}
+else
+{
+    <h4>Ranking de jugadores</h4>
+
+    @if (ranking.Count == 0)
+    {
+        <p>No hay jugadores con puntos todavía.</p>
+    }
+    else
+    {
+        <table>
+            <thead>
+                <tr>
+                    <th>Posición</th>
+                    <th>Jugador</th>
+                    <th>Puntos</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @{
+                    int posicion = 1;
+                }
+
+                @foreach (Quiniegol.Core.Models.Ranking jugador in ranking)
+                {
+                    Usuario? usuario =
+                        UsuariosData.BuscarPorIdEmpleado(jugador.IdEmpleado);
+
+                    string nombre = jugador.IdEmpleado;
+
+                    if (usuario != null)
+                    {
+                        nombre =
+                            usuario.Nombre + " " + usuario.Apellido;
+                    }
+
+                    <tr>
+                        <td>@posicion</td>
+                        <td>@nombre</td>
+                        <td>@jugador.Puntos</td>
+                    </tr>
+
+                    posicion++;
+                }
+            </tbody>
+        </table>
+
+        <br />
+
+        <a href="@ObtenerArchivoRanking()"
+           download="Ranking.txt">
+            Descargar Ranking
+        </a>
+    }
+}
 
 @code {
+    private List<Quiniegol.Core.Models.Ranking> ranking =
+        new List<Quiniegol.Core.Models.Ranking>();
 
+    private RankingController rankingController =
+        new RankingController();
+
+    protected override void OnInitialized()
+    {
+        CargarRanking();
+    }
+
+    private void CargarRanking()
+    {
+        ranking =
+            rankingController.GenerarRanking();
+    }
+
+    private string ObtenerArchivoRanking()
+    {
+        List<string> lineas =
+            new List<string>();
+
+        lineas.Add("========== RANKING QUINIEGOL ==========");
+        lineas.Add("");
+
+        int posicion = 1;
+
+        foreach (Quiniegol.Core.Models.Ranking jugador in ranking)
+        {
+            Usuario? usuario =
+                UsuariosData.BuscarPorIdEmpleado(jugador.IdEmpleado);
+
+            string nombre = jugador.IdEmpleado;
+
+            if (usuario != null)
+            {
+                nombre =
+                    usuario.Nombre + " " + usuario.Apellido;
+            }
+
+            lineas.Add(
+                $"{posicion}. {nombre} - {jugador.Puntos} puntos"
+            );
+
+            posicion++;
+        }
+
+        string contenido =
+            string.Join(Environment.NewLine, lineas);
+
+        return "data:text/plain;charset=utf-8," +
+               Uri.EscapeDataString(contenido);
+    }
 }

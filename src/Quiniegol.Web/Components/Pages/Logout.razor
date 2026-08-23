@@ -1,0 +1,16 @@
+﻿@page "/logout"
+@rendermode InteractiveServer
+
+@using Quiniegol.Core.Utils
+@inject NavigationManager Navigation
+
+<p>Cerrando sesión...</p>
+
+@code {
+    protected override void OnInitialized()
+    {
+        Sesion.Cerrar();
+
+        Navigation.NavigateTo("/login");
+    }
+}

@@ -1,5 +1,9 @@
 ﻿@page "/principal-usuario"
+
+@rendermode InteractiveServer
+
 @using Quiniegol.Core.Utils
+
 @inject NavigationManager Navigation
 
 <h3>Principal - Usuario</h3>
@@ -10,14 +14,19 @@
 }
 else if (!Sesion.EsUser)
 {
-    <p>No tiene permisos para acceder a esta página.</p>
+    <p>No tiene permisos para acceder a esta pagina, favor contactar al administrador.</p>
 }
 else
 {
     <p>Bienvenido, @Sesion.UsuarioActual!.Nombre</p>
 
-    <button @onclick="IrPronosticos">Pronósticos</button>
-    <button @onclick="IrRanking">Ranking</button>
+    <button @onclick="IrPronosticos">
+        Pronosticos
+    </button>
+
+    <button @onclick="IrRanking">
+        Ranking
+    </button>
 }
 
 @code {
