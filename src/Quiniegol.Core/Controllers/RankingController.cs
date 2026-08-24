@@ -20,16 +20,19 @@ namespace Quiniegol.Core.Controllers
             {
                 Partido partido = PartidosData.BuscarPorId(pronostico.IdPartido);
 
+                // Si el partido ya no existe, el pronóstico no puede utilizarse para calcular el ranking
                 if (partido == null)
                 {
                     continue;
                 }
 
+                // Solo se toman en cuenta partidos que ya finalizaron
                 if (partido.Estado != "Cerrado")
                 {
                     continue;
                 }
 
+                // El jugador solamente obtiene un punto si su pronóstico coincide con el resultado real del partido
                 if (pronostico.ResultadoPronosticado != partido.Resultado)
                 {
                     continue;
@@ -37,6 +40,7 @@ namespace Quiniegol.Core.Controllers
 
                 Ranking jugador = null;
 
+                // Se busca si el empleado ya tiene una posición creada dentro del ranking para poder acumular sus puntos
                 foreach (Ranking r in ranking)
                 {
                     if (r.IdEmpleado == pronostico.IdEmpleado)
@@ -57,11 +61,14 @@ namespace Quiniegol.Core.Controllers
                 }
                 else
                 {
+                    // Si el jugador ya existe, se suma un punto por haber acertado otro pronóstico
                     jugador.Puntos++;
                 }
             }
 
+            // Se ordena el ranking de mayor a menor cantidad de puntos
             ranking = ranking.OrderByDescending(r => r.Puntos).ToList();
+
             return ranking;
         }
 

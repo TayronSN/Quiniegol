@@ -2,11 +2,11 @@
 @page "/login"
 @rendermode InteractiveServer
 @inject NavigationManager Navigation
+
 @using Quiniegol.Core.Utils
 @using Quiniegol.Core.Models
 @using Quiniegol.Core.Data
 @using Quiniegol.Core.Controllers
-
 
 <h3>Iniciar sesión</h3>
 
@@ -22,9 +22,13 @@
 
 <br />
 
-<button @onclick="IniciarSesion">Iniciar sesión</button>
+<button @onclick="IniciarSesion">
+    Iniciar sesión
+</button>
 
-<button @onclick="IrARegistro">Registrar usuario</button>
+<button @onclick="IrARegistro">
+    Registrar usuario
+</button>
 
 <p>@mensaje</p>
 
@@ -34,21 +38,21 @@
     private string mensaje = "";
 
     private void IniciarSesion()
-    {   
-        
+    {
         UsuarioController usuarioController = new UsuarioController();
 
-        string resultado = usuarioController.IniciarSesion(idEmpleado, password);
+		// El controlador valida los datos y devuelve un mensaje si algo falla
+        string resultado = usuarioController.IniciarSesion( idEmpleado, password);
 
+        // Si el controlador devuelve un mensaje, significa que alguna validación falló.
         if (!string.IsNullOrEmpty(resultado))
         {
             mensaje = resultado;
             return;
         }
 
+        // Se obtiene el usuario para conocer sus datos y su rol.
         Usuario? usuario = UsuariosData.BuscarPorIdEmpleado(idEmpleado);
-
-        mensaje = $"Sesión iniciada. Usuario: {usuario.Nombre}, Rol: {usuario.IdRol}";
 
         if (usuario == null)
         {
@@ -56,8 +60,12 @@
             return;
         }
 
+        mensaje = $"Sesión iniciada. Usuario: {usuario.Nombre}, Rol: {usuario.IdRol}";
+
+        // Guarda el usuario como la sesión actualmente activa.
         Sesion.Iniciar(usuario);
 
+        // Cada rol tiene una página principal diferente.
         if (usuario.IdRol == 1)
         {
             Navigation.NavigateTo("/principal");

@@ -12,6 +12,7 @@ namespace Quiniegol.Core.Data
 
         public static void InicializarEquipos()
         {
+            // Si el archivo todavía no existe, se crea inicialmente como una lista vacía
             if (!File.Exists(rutaArchivo))
             {
                 File.WriteAllText(rutaArchivo, "[]");
@@ -19,15 +20,18 @@ namespace Quiniegol.Core.Data
 
             List<Equipo> equipos = LeerEquipos();
 
+            // Si ya existen equipos registrados, no se vuelven a crear
             if (equipos.Count > 0)
             {
                 return;
             }
 
+            // Se cargan los equipos oficiales cuando el archivo está vacío
             equipos = ObtenerEquiposOficiales();
 
             string json = JsonSerializer.Serialize(equipos, new JsonSerializerOptions
             {
+                // Permite que el contenido del archivo JSON quede ordenado y legible
                 WriteIndented = true
             });
 
@@ -48,6 +52,7 @@ namespace Quiniegol.Core.Data
                 return new List<Equipo>();
             }
 
+            // Deserializa el contenido JSON para convertirlo nuevamente en una lista de objetos Equipo
             List<Equipo>? equipos = JsonSerializer.Deserialize<List<Equipo>>(json);
 
             return equipos ?? new List<Equipo>();
@@ -68,6 +73,7 @@ namespace Quiniegol.Core.Data
 
         private static List<Equipo> ObtenerEquiposOficiales()
         {
+            // Lista inicial de los equipos que utilizará el sistema, incluyendo su grupo y la ruta de la bandera correspondiente.
             return new List<Equipo>
             {
                 new Equipo{ IdEquipo=1, Nombre="Mexico", Grupo="A", Bandera="Resources/Banderas/mexico.png"},

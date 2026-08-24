@@ -8,7 +8,7 @@ namespace Quiniegol.Core.Data
 {
     public class UsuariosData
     {
-        private static readonly string rutaArchivo = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,@"..\..\..\..\Quiniegol.Core\Data\usuarios.json"));
+        private static readonly string rutaArchivo = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\..\Quiniegol.Core\Data\usuarios.json"));
 
         public static List<Usuario> LeerUsuarios()
         {
@@ -24,8 +24,8 @@ namespace Quiniegol.Core.Data
                 return new List<Usuario>();
             }
 
-            List<Usuario>? usuarios =
-                JsonSerializer.Deserialize<List<Usuario>>(json);
+            // Convierte el contenido del archivo JSON en una lista de objetos Usuario.
+            List<Usuario>? usuarios = JsonSerializer.Deserialize<List<Usuario>>(json);
 
             return usuarios ?? new List<Usuario>();
         }
@@ -66,6 +66,7 @@ namespace Quiniegol.Core.Data
 
             usuarios.Add(usuario);
 
+            // Se serializa nuevamente toda la lista para guardar el nuevo usuario
             string json = JsonSerializer.Serialize(usuarios);
 
             File.WriteAllText(rutaArchivo, json);
@@ -75,6 +76,7 @@ namespace Quiniegol.Core.Data
         {
             List<Usuario> usuarios = LeerUsuarios();
 
+            // Se busca el usuario por su ID y se reemplaza por la información actualizada
             for (int i = 0; i < usuarios.Count; i++)
             {
                 if (usuarios[i].IdEmpleado == usuario.IdEmpleado)
@@ -93,6 +95,7 @@ namespace Quiniegol.Core.Data
         {
             List<Usuario> usuarios = LeerUsuarios();
 
+            // Se busca el usuario por su ID y se elimina de la lista
             for (int i = 0; i < usuarios.Count; i++)
             {
                 if (usuarios[i].IdEmpleado == usuario.IdEmpleado)

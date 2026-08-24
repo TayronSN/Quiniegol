@@ -33,14 +33,16 @@ else
 
             <tbody>
                 @{
+                    // Se utiliza para numerar las posiciones del ranking
                     int posicion = 1;
                 }
 
                 @foreach (Quiniegol.Core.Models.Ranking jugador in ranking)
                 {
-                    Usuario? usuario =
-                        UsuariosData.BuscarPorIdEmpleado(jugador.IdEmpleado);
+                    // Se busca el usuario para mostrar su nombre en lugar de solamente su ID de empleado
+                    Usuario? usuario = UsuariosData.BuscarPorIdEmpleado(jugador.IdEmpleado);
 
+                    // Si el usuario no existe, se utiliza el ID
                     string nombre = jugador.IdEmpleado;
 
                     if (usuario != null)
@@ -70,27 +72,25 @@ else
 }
 
 @code {
-    private List<Quiniegol.Core.Models.Ranking> ranking =
-        new List<Quiniegol.Core.Models.Ranking>();
+    private List<Quiniegol.Core.Models.Ranking> ranking = new List<Quiniegol.Core.Models.Ranking>();
 
-    private RankingController rankingController =
-        new RankingController();
+    private RankingController rankingController = new RankingController();
 
     protected override void OnInitialized()
     {
+        // Se genera el ranking al cargar la página.
         CargarRanking();
     }
 
     private void CargarRanking()
     {
-        ranking =
-            rankingController.GenerarRanking();
+        // El controlador calcula los puntos y devuelve los jugadores ordenados según su puntuación.
+        ranking = rankingController.GenerarRanking();
     }
 
     private string ObtenerArchivoRanking()
     {
-        List<string> lineas =
-            new List<string>();
+        List<string> lineas = new List<string>();
 
         lineas.Add("========== RANKING QUINIEGOL ==========");
         lineas.Add("");
@@ -99,28 +99,26 @@ else
 
         foreach (Quiniegol.Core.Models.Ranking jugador in ranking)
         {
-            Usuario? usuario =
-                UsuariosData.BuscarPorIdEmpleado(jugador.IdEmpleado);
+            // Se obtiene el nombre del jugador a partir de su ID.
+            Usuario? usuario = UsuariosData.BuscarPorIdEmpleado(jugador.IdEmpleado);
 
+            // Si no se encuentra el usuario, se utiliza su ID.
             string nombre = jugador.IdEmpleado;
 
             if (usuario != null)
             {
-                nombre =
-                    usuario.Nombre + " " + usuario.Apellido;
+                nombre = usuario.Nombre + " " + usuario.Apellido;
             }
 
-            lineas.Add(
-                $"{posicion}. {nombre} - {jugador.Puntos} puntos"
-            );
+            lineas.Add($"{posicion}. {nombre} - {jugador.Puntos} puntos");
 
             posicion++;
         }
 
-        string contenido =
-            string.Join(Environment.NewLine, lineas);
+        // Se unen todas las líneas para formar el contenido del archivo.
+        string contenido = string.Join(Environment.NewLine, lineas);
 
-        return "data:text/plain;charset=utf-8," +
-               Uri.EscapeDataString(contenido);
+        // Se convierte el texto en un enlace de descarga mediante un Data URI, evitando crear un archivo físico en el servidor.
+        return "data:text/plain;charset=utf-8," + Uri.EscapeDataString(contenido);
     }
 }

@@ -4,12 +4,14 @@
     <div class="container-fluid">
         @if (Sesion.EsAdmin)
         {
+            <!-- El administrador es dirigido a su página principal. -->
             <a class="navbar-brand" href="/principal">
                 Quiniegol
             </a>
         }
         else
         {
+            <!-- El usuario normal es dirigido a su página principal. -->
             <a class="navbar-brand" href="/principal-usuario">
                 Quiniegol
             </a>
@@ -26,6 +28,7 @@
 
     <nav class="nav flex-column">
 
+        <!-- Opciones disponibles exclusivamente para administradores. -->
         @if (Sesion.EsAdmin)
         {
             <div class="nav-item px-3">
@@ -63,30 +66,33 @@
                 </NavLink>
             </div>
         }
+
+        <!-- Opciones disponibles para usuarios normales. -->
         else if (Sesion.EsUser)
         {
-            <div class="nav-item px-3">
-                <NavLink class="nav-link"
-                         href="/principal-usuario">
-                    Principal
-                </NavLink>
-            </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link"
+                     href="/principal-usuario">
+                Principal
+            </NavLink>
+        </div>
 
-            <div class="nav-item px-3">
-                <NavLink class="nav-link"
-                         href="/pronosticos">
-                    Pronósticos
-                </NavLink>
-            </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link"
+                     href="/pronosticos">
+                Pronósticos
+            </NavLink>
+        </div>
 
-            <div class="nav-item px-3">
-                <NavLink class="nav-link"
-                         href="/ranking">
-                    Ranking
-                </NavLink>
-            </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link"
+                     href="/ranking">
+                Ranking
+            </NavLink>
+        </div>
         }
 
+        <!-- Solo muestra la opción de cerrar sesión cuando existe una sesión activa. -->
         @if (Sesion.InicioSesion)
         {
             <div class="nav-item px-3">

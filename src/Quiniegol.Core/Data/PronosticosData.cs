@@ -25,6 +25,7 @@ namespace Quiniegol.Core.Data
                 return new List<Pronostico>();
             }
 
+            // Convierte el contenido del archivo JSON en una lista de objetos Pronostico
             List<Pronostico> pronosticos = JsonSerializer.Deserialize<List<Pronostico>>(json);
 
             return pronosticos ?? new List<Pronostico>();
@@ -49,11 +50,13 @@ namespace Quiniegol.Core.Data
         {
             List<Pronostico> pronosticos = LeerPronosticos();
 
+            // Si no existen pronósticos, el primer ID será 1
             if (pronosticos.Count == 0)
             {
                 return 1;
             }
 
+            // ^1 obtiene el último elemento de la lista a partir de su ID se genera el siguiente consecutivo
             return pronosticos[^1].IdPronostico + 1;
         }
 
@@ -63,8 +66,10 @@ namespace Quiniegol.Core.Data
 
             pronosticos.Add(pronostico);
 
+            // Se serializa nuevamente toda la lista para guardar el nuevo pronóstico
             string json = JsonSerializer.Serialize(pronosticos, new JsonSerializerOptions
             {
+                // Mantiene el archivo JSON organizado y fácil de leer
                 WriteIndented = true
             });
 
@@ -75,6 +80,7 @@ namespace Quiniegol.Core.Data
         {
             List<Pronostico> pronosticos = LeerPronosticos();
 
+            // Se busca el pronóstico por su ID y se reemplaza por la versión actualizada
             for (int i = 0; i < pronosticos.Count; i++)
             {
                 if (pronosticos[i].IdPronostico == pronostico.IdPronostico)
@@ -96,6 +102,7 @@ namespace Quiniegol.Core.Data
         {
             List<Pronostico> pronosticos = LeerPronosticos();
 
+            // RemoveAll elimina los pronósticos que tengan el mismo ID
             pronosticos.RemoveAll(p => p.IdPronostico == pronostico.IdPronostico);
 
             string json = JsonSerializer.Serialize(pronosticos, new JsonSerializerOptions
@@ -107,4 +114,3 @@ namespace Quiniegol.Core.Data
         }
     }
 }
-

@@ -5,6 +5,7 @@
 @using Quiniegol.Core.Models
 @using Quiniegol.Core.Data
 @using Quiniegol.Core.Utils
+@using Quiniegol.Core.Controllers
 
 @inject IJSRuntime JS
 
@@ -107,6 +108,7 @@ else
 
     protected override void OnInitialized()
     {
+        // Carga los usuarios cuando se abre la página.
         CargarUsuarios();
     }
 
@@ -117,6 +119,7 @@ else
 
     private void ActualizarLista()
     {
+        // Vuelve a leer el archivo para mostrar los datos actualizados.
         CargarUsuarios();
 
         mensaje = "Lista actualizada.";
@@ -130,8 +133,8 @@ else
             return;
         }
 
-        Usuario? usuario =
-            UsuariosData.BuscarPorIdEmpleado(idUsuarioSeleccionado);
+        // Se busca el usuario seleccionado para comprobar que exista.
+        Usuario? usuario = UsuariosData.BuscarPorIdEmpleado(idUsuarioSeleccionado);
 
         if (usuario == null)
         {
@@ -139,29 +142,34 @@ else
             return;
         }
 
+        // Los administradores no pueden eliminarse desde esta sección.
         if (usuario.IdRol == 1)
         {
             mensaje = "No se puede eliminar un administrador.";
             return;
         }
 
-        bool confirmar =
-            await JS.InvokeAsync<bool>(
-                "confirm",
-                "¿Desea eliminar este usuario?");
+        // IJSRuntime permite ejecutar una función de JavaScript desde el código C# de Blazor.
+        bool confirmar = await JS.InvokeAsync<bool>("confirm","¿Desea eliminar este usuario?");
 
         if (!confirmar)
         {
             return;
         }
 
-        UsuariosData.EliminarUsuario(usuario);
+        UsuarioController usuarioController = new UsuarioController();
 
-        mensaje = "Usuario eliminado correctamente.";
+        // El controlador realiza la eliminación y devuelve el mensaje correspondiente.
+        mensaje = usuarioController.EliminarUsuario(idUsuarioSeleccionado);
 
-        CargarUsuarios();
+        if (mensaje == "Usuario eliminado correctamente.")
+        {
+            // Se actualiza la tabla después de eliminar.
+            CargarUsuarios();
 
-        idUsuarioSeleccionado = "";
+            // Se limpia la selección del usuario eliminado.
+            idUsuarioSeleccionado = "";
+        }
     }
 
     private string ObtenerNombreRol(int idRol)
@@ -183,10 +191,7 @@ else
 
         foreach (Usuario usuario in UsuariosData.LeerUsuarios())
         {
-            string rol =
-                usuario.IdRol == 1
-                    ? "Administrador"
-                    : "Usuario";
+            string rol = usuario.IdRol == 1 ? "Administrador" : "Usuario";
 
             lineas.Add($"ID: {usuario.IdEmpleado}");
             lineas.Add($"Nombre: {usuario.Nombre} {usuario.Apellido}");
@@ -197,10 +202,10 @@ else
             lineas.Add("----------------------------------------");
         }
 
-        string contenido =
-            string.Join(Environment.NewLine, lineas);
+        // Se unen todas las líneas para formar el contenido que tendrá el archivo de texto.
+        string contenido = string.Join(Environment.NewLine, lineas);
 
-        return "data:text/plain;charset=utf-8," +
-               Uri.EscapeDataString(contenido);
+        // Se genera un Data URI para que el navegador pueda descargar el contenido como un archivo .txt.
+        return "data:text/plain;charset=utf-8," + Uri.EscapeDataString(contenido);
     }
 }

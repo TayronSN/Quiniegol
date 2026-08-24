@@ -25,15 +25,16 @@ namespace Quiniegol.Core.Controllers
                 return "Debe seleccionar un pronostico.";
             }
 
+            // Se revisan los pronósticos existentes para evitar que un empleado registre más de un pronóstico para el mismo partido
             foreach (Pronostico p in PronosticosData.LeerPronosticos())
             {
-                if (p.IdEmpleado == pronostico.IdEmpleado &&
-                    p.IdPartido == pronostico.IdPartido)
+                if (p.IdEmpleado == pronostico.IdEmpleado && p.IdPartido == pronostico.IdPartido)
                 {
                     return "Este empleado ya realizo un pronostico para este partido.";
                 }
             }
 
+            // Se obtiene un nuevo ID antes de guardar el pronóstico.
             pronostico.IdPronostico = PronosticosData.ObtenerSiguienteId();
 
             PronosticosData.GuardarPronostico(pronostico);

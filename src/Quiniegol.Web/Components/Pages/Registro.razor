@@ -1,7 +1,9 @@
 ﻿@page "/registro"
 @rendermode InteractiveServer
-@using Quiniegol.Core.Controllers;
-@using Quiniegol.Core.Models;
+
+@using Quiniegol.Core.Controllers
+@using Quiniegol.Core.Models
+
 @inject NavigationManager Navigation
 
 <h3>Registrar usuario</h3>
@@ -23,7 +25,16 @@
 
 <div>
     <label>Departamento</label>
-    <input @bind="departamento" />
+
+    <select @bind="departamento">
+        <option value="">Seleccione un departamento</option>
+        <option value="Finanzas">Finanzas</option>
+        <option value="Recursos Humanos">Recursos Humanos</option>
+        <option value="Tecnología">Tecnología</option>
+        <option value="Facilities">Facilities</option>
+        <option value="Seguridad">Seguridad</option>
+        <option value="Call Center">Call Center</option>
+    </select>
 </div>
 
 <div>
@@ -43,9 +54,13 @@
 
 <br />
 
-<button @onclick="Registrar">Registrar usuario</button>
+<button @onclick="Registrar">
+    Registrar usuario
+</button>
 
-<button @onclick="VolverLogin">Volver al login</button>
+<button @onclick="VolverLogin">
+    Volver al login
+</button>
 
 <p>@mensaje</p>
 
@@ -58,11 +73,11 @@
     private string password = "";
     private string confirmarPassword = "";
 
-    private void Registrar()
-    {   
-		//test de boton
-        //mensaje = "El botón funciona";
+    private string mensaje = "";
 
+    private void Registrar()
+    {
+        // Se crea el objeto Usuario con los datos introducidos en el formulario
         Usuario usuario = new Usuario();
 
         usuario.IdEmpleado = idEmpleado;
@@ -71,26 +86,27 @@
         usuario.Departamento = departamento;
         usuario.Correo = correo;
         usuario.Password = password;
+
+        // Todos los usuarios registrados desde el formulario se crean con el rol de usuario normal
         usuario.IdRol = 2;
 
         UsuarioController usuarioController = new UsuarioController();
 
+        // El controlador realiza las validaciones y guarda el usuario si todos los datos son correctos
         mensaje = usuarioController.RegistrarUsuario(usuario, confirmarPassword);
 
         if (string.IsNullOrEmpty(mensaje))
         {
             mensaje = "Usuario registrado correctamente.";
 
-			Navigation.NavigateTo("/login");
+            // Si el registro fue exitoso, se regresa al login
+            Navigation.NavigateTo("/login");
         }
-
-        
     }
 
     private void VolverLogin()
     {
+        // Regresa al formulario de inicio de sesión sin registrar ningún usuario
         Navigation.NavigateTo("/login");
     }
-
-    private string mensaje = "";
 }

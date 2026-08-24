@@ -6,6 +6,8 @@
 @using Quiniegol.Core.Controllers
 @using Quiniegol.Core.Utils
 
+@inject IJSRuntime JS
+
 <h3>Partidos</h3>
 
 @if (!Sesion.InicioSesion)
@@ -41,11 +43,9 @@ else
             <tbody>
                 @foreach (Partido partido in partidos)
                 {
-                    Equipo? equipoLocal =
-                        EquiposData.BuscarPorId(partido.IdEquipoLocal);
+                    Equipo? equipoLocal = EquiposData.BuscarPorId(partido.IdEquipoLocal);
 
-                    Equipo? equipoVisitante =
-                        EquiposData.BuscarPorId(partido.IdEquipoVisitante);
+                    Equipo? equipoVisitante = EquiposData.BuscarPorId(partido.IdEquipoVisitante);
 
                     <tr>
                         <td>@partido.IdPartido</td>
@@ -120,16 +120,14 @@ else
     <div>
         <label>Partido</label>
 
-        <select @bind="idPartidoSeleccionado">
+        <select @bind="idPartidoActualizar">
             <option value="0">Seleccione un partido</option>
 
             @foreach (Partido partido in partidos)
             {
-                Equipo? equipoLocal =
-                    EquiposData.BuscarPorId(partido.IdEquipoLocal);
+                Equipo? equipoLocal = EquiposData.BuscarPorId(partido.IdEquipoLocal);
 
-                Equipo? equipoVisitante =
-                    EquiposData.BuscarPorId(partido.IdEquipoVisitante);
+                Equipo? equipoVisitante = EquiposData.BuscarPorId(partido.IdEquipoVisitante);
 
                 <option value="@partido.IdPartido">
                     @equipoLocal?.Nombre vs @equipoVisitante?.Nombre
@@ -164,16 +162,14 @@ else
     <div>
         <label>Partido</label>
 
-        <select @bind="idPartidoSeleccionado">
+        <select @bind="idPartidoEliminar">
             <option value="0">Seleccione un partido</option>
 
             @foreach (Partido partido in partidos)
             {
-                Equipo? equipoLocal =
-                    EquiposData.BuscarPorId(partido.IdEquipoLocal);
+                Equipo? equipoLocal = EquiposData.BuscarPorId(partido.IdEquipoLocal);
 
-                Equipo? equipoVisitante =
-                    EquiposData.BuscarPorId(partido.IdEquipoVisitante);
+                Equipo? equipoVisitante = EquiposData.BuscarPorId(partido.IdEquipoVisitante);
 
                 <option value="@partido.IdPartido">
                     @equipoLocal?.Nombre vs @equipoVisitante?.Nombre
@@ -198,7 +194,10 @@ else
 
     private Partido nuevoPartido = new Partido();
 
-    private int idPartidoSeleccionado;
+    // Se mantienen IDs separados para que actualizar y eliminar puedan seleccionar partidos de forma independiente
+    private int idPartidoActualizar;
+
+    private int idPartidoEliminar;
 
     private string resultadoSeleccionado = "";
 
@@ -206,6 +205,7 @@ else
 
     protected override void OnInitialized()
     {
+        // Se cargan los partidos y equipos al abrir la página
         partidos = PartidosData.LeerPartidos();
 
         equipos = EquiposData.LeerEquipos();
@@ -213,26 +213,27 @@ else
 
     private void RegistrarPartido()
     {
-        PartidoController partidoController =
-            new PartidoController();
+        PartidoController partidoController = new PartidoController();
 
-        string resultado =
-            partidoController.RegistrarPartido(nuevoPartido);
+        // El controlador realiza las validaciones antes de guardar el partido
+        string resultado = partidoController.RegistrarPartido(nuevoPartido);
 
         mensaje = resultado;
 
         if (resultado == "Partido registrado correctamente.")
         {
+            // Se actualiza la lista para mostrar inmediatamente el nuevo partido
             partidos = PartidosData.LeerPartidos();
 
+            // Se crea un nuevo objeto para limpiar los campos del formulario
             nuevoPartido = new Partido();
         }
     }
 
     private void ActualizarPartido()
     {
-        Partido? partido =
-            PartidosData.BuscarPorId(idPartidoSeleccionado);
+        // Se busca el partido seleccionado para modificarlo
+        Partido? partido = PartidosData.BuscarPorId(idPartidoActualizar);
 
         if (partido == null)
         {
@@ -242,11 +243,10 @@ else
 
         partido.Resultado = resultadoSeleccionado;
 
-        PartidoController partidoController =
-            new PartidoController();
+        PartidoController partidoController = new PartidoController();
 
-        string resultado =
-            partidoController.ActualizarPartido(partido);
+        // El controlador actualiza también el estado del partido si tiene o no un resultado
+        string resultado = partidoController.ActualizarPartido(partido);
 
         mensaje = resultado;
 
@@ -254,16 +254,17 @@ else
         {
             partidos = PartidosData.LeerPartidos();
 
-            idPartidoSeleccionado = 0;
+            // Limpia únicamente los campos utilizados para actualizar
+            idPartidoActualizar = 0;
 
             resultadoSeleccionado = "";
         }
     }
 
-    private void EliminarPartido()
+    private async Task EliminarPartido()
     {
-        Partido? partido =
-            PartidosData.BuscarPorId(idPartidoSeleccionado);
+        // Se obtiene el partido seleccionado para eliminarlo
+        Partido? partido = PartidosData.BuscarPorId(idPartidoEliminar);
 
         if (partido == null)
         {
@@ -271,14 +272,30 @@ else
             return;
         }
 
-        PartidosData.EliminarPartido(partido);
+        Equipo? equipoLocal = EquiposData.BuscarPorId(partido.IdEquipoLocal);
 
-        partidos = PartidosData.LeerPartidos();
+        Equipo? equipoVisitante = EquiposData.BuscarPorId(partido.IdEquipoVisitante);
 
-        idPartidoSeleccionado = 0;
+        string nombrePartido = $"{equipoLocal?.Nombre} vs {equipoVisitante?.Nombre}";
 
-        resultadoSeleccionado = "";
+        // Se solicita confirmación antes de eliminar el partido.
+        bool confirmar = await JS.InvokeAsync<bool>( "confirm", $"¿Desea eliminar el partido {nombrePartido}?");
 
-        mensaje = "Partido eliminado correctamente.";
+        if (!confirmar)
+        {
+            return;
+        }
+
+        PartidoController partidoController = new PartidoController();
+
+        mensaje = partidoController.EliminarPartido(idPartidoEliminar);
+
+        if (mensaje == "Partido eliminado correctamente.")
+        {
+            // Se actualiza la tabla después de eliminar el partido
+            partidos = PartidosData.LeerPartidos();
+
+            idPartidoEliminar = 0;
+        }
     }
 }
