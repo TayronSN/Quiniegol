@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="Quiniegol.Core\Quiniegol.Core.csproj" />
+  <Project Path="Quiniegol.Web\Quiniegol.Web.csproj" />
+  <Project Path="Quiniegol.Tests\Quiniegol.Tests.csproj" />
+</Solution>

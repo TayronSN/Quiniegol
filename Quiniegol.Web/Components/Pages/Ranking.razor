@@ -1,5 +1,130 @@
-﻿<h3>Ranking</h3>
+@page "/ranking"
+@rendermode InteractiveServer
+
+@using Quiniegol.Core.Controllers
+@using Quiniegol.Core.Data
+@using Quiniegol.Core.Models
+@using Quiniegol.Core.Utils
+
+@inject SesionService Sesion
+@implements IDisposable
+
+<h3>Ranking</h3>
+
+@if (!Sesion.InicioSesion)
+{
+    <p>Debe iniciar sesión.</p>
+}
+else
+{
+    <h4>Ranking de jugadores</h4>
+
+    @if (ranking.Count == 0)
+    {
+        <p>No hay jugadores con puntos todavía.</p>
+    }
+    else
+    {
+        <table>
+            <thead>
+                <tr>
+                    <th>Posición</th>
+                    <th>Jugador</th>
+                    <th>Puntos</th>
+                    <th>% Acierto</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @{
+                    int posicion = 1;
+                }
+
+                @foreach (Quiniegol.Core.Models.Ranking jugador in ranking)
+                {
+                    Usuario? usuario = UsuariosData.BuscarPorIdEmpleado(jugador.IdEmpleado);
+
+                    string nombre = usuario != null
+                        ? usuario.Nombre + " " + usuario.Apellido
+                        : jugador.IdEmpleado;
+
+                    double porcentaje = estadisticas.ObtenerPorcentajeAcierto(jugador.IdEmpleado);
+
+                    <tr>
+                        <td>@posicion</td>
+                        <td>@nombre</td>
+                        <td>@jugador.Puntos</td>
+                        <td>@porcentaje.ToString("F1")%</td>
+                    </tr>
+
+                    posicion++;
+                }
+            </tbody>
+        </table>
+
+        <br />
+
+        <a href="@ObtenerArchivoRanking()"
+           download="Ranking.txt">
+            Descargar Ranking
+        </a>
+    }
+}
 
 @code {
+    private List<Quiniegol.Core.Models.Ranking> ranking = new List<Quiniegol.Core.Models.Ranking>();
 
+    private RankingController rankingController = new RankingController();
+
+    private EstadisticasController estadisticas = new EstadisticasController();
+
+    protected override void OnInitialized()
+    {
+        Sesion.OnCambio += SesionCambio;
+        CargarRanking();
+    }
+
+    private void SesionCambio()
+    {
+        InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        Sesion.OnCambio -= SesionCambio;
+    }
+
+    private void CargarRanking()
+    {
+        ranking = rankingController.GenerarRanking();
+    }
+
+    private string ObtenerArchivoRanking()
+    {
+        List<string> lineas = new List<string>();
+
+        lineas.Add("========== RANKING QUINIEGOL ==========");
+        lineas.Add("");
+
+        int posicion = 1;
+
+        foreach (Quiniegol.Core.Models.Ranking jugador in ranking)
+        {
+            Usuario? usuario = UsuariosData.BuscarPorIdEmpleado(jugador.IdEmpleado);
+
+            string nombre = usuario != null
+                ? usuario.Nombre + " " + usuario.Apellido
+                : jugador.IdEmpleado;
+
+            double porcentaje = estadisticas.ObtenerPorcentajeAcierto(jugador.IdEmpleado);
+
+            lineas.Add($"{posicion}. {nombre} - {jugador.Puntos} puntos - {porcentaje:F1}% acierto");
+
+            posicion++;
+        }
+
+        string contenido = string.Join(Environment.NewLine, lineas);
+
+        return "data:text/plain;charset=utf-8," + Uri.EscapeDataString(contenido);
+    }
 }

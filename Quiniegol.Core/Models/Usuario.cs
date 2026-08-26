@@ -1,13 +1,21 @@
-﻿namespace Quiniegol.Core.Models
+namespace Quiniegol.Core.Models
 {
+    // Representa un empleado registrado en el sistema.
     public class Usuario
     {
-        public string IdEmpleado { get; set; }
-        public string Departamento { get; set; }
-        public string Nombre { get; set; }
-        public string Apellido { get; set; }
-        public string Correo { get; set; }
-        public string Password { get; set; }
+        public string IdEmpleado { get; set; } = string.Empty;
+
+        public string Departamento { get; set; } = string.Empty;
+
+        public string Nombre { get; set; } = string.Empty;
+
+        public string Apellido { get; set; } = string.Empty;
+
+        public string Correo { get; set; } = string.Empty;
+
+        public string Password { get; set; } = string.Empty;
+
+        // 1 = Administrador, 2 = Usuario normal.
         public int IdRol { get; set; }
     }
 }

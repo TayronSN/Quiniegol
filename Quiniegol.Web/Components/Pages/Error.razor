@@ -24,13 +24,17 @@
     and restarting the app.
 </p>
 
-@code{
+@code {
     [CascadingParameter]
     private HttpContext? HttpContext { get; set; }
 
+    // Identificador que permite relacionar la solicitud con el error ocurrido.
     private string? RequestId { get; set; }
+
+    // Solo muestra el Request ID cuando existe un valor.
     private bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
 
+    // Obtiene el identificador de la actividad actual, si no existey utiliza el identificador de la solicitud HTTP.
     protected override void OnInitialized() =>
         RequestId = Activity.Current?.Id ?? HttpContext?.TraceIdentifier;
 }

@@ -1,10 +1,5 @@
 ﻿using Quiniegol.Core.Data;
 using Quiniegol.Core.Models;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using System.Text.Json;
 using System.Net.Mail;
 
 namespace Quiniegol.Core.Controllers
@@ -13,6 +8,8 @@ namespace Quiniegol.Core.Controllers
     {
         public string RegistrarUsuario(Usuario usuario, string confirmarPassword)
         {
+            // Se ejecutan validaciones del registro, se detiene si alguna falla y se devuelve el mensaje de error correspondiente.
+
             string mensaje = ValidarCamposObligatorios(usuario, confirmarPassword);
 
             if (!string.IsNullOrWhiteSpace(mensaje))
@@ -34,7 +31,7 @@ namespace Quiniegol.Core.Controllers
                 return mensaje;
             }
 
-            mensaje = ValidarConfirmacionPassword(usuario, confirmarPassword);
+            mensaje = ValidarConfirmacionPassword(usuario,confirmarPassword);
 
             if (!string.IsNullOrEmpty(mensaje))
             {
@@ -55,14 +52,13 @@ namespace Quiniegol.Core.Controllers
                 return mensaje;
             }
 
+            // Si todas las validaciones son correctas, se guarda el usuario.
             UsuariosData.GuardarUsuario(usuario);
 
             return "";
         }
 
-        private string ValidarCamposObligatorios(
-            Usuario usuario,
-            string confirmarPassword)
+        private string ValidarCamposObligatorios(Usuario usuario,string confirmarPassword)
         {
             if (string.IsNullOrWhiteSpace(usuario.IdEmpleado))
             {
@@ -106,6 +102,8 @@ namespace Quiniegol.Core.Controllers
         {
             try
             {
+                // MailAddress permite comprobar si el texto tiene un formato valido para una dirección de correo electrónico.
+
                 MailAddress correo = new MailAddress(usuario.Correo);
             }
             catch
@@ -123,6 +121,7 @@ namespace Quiniegol.Core.Controllers
                 return "La contraseña debe tener al menos 5 caracteres";
             }
 
+            // Se revisa cada carácter para impedir números y otros símbolos.
             foreach (char caracter in usuario.Password)
             {
                 if (!char.IsLetter(caracter))
@@ -134,9 +133,7 @@ namespace Quiniegol.Core.Controllers
             return "";
         }
 
-        private string ValidarConfirmacionPassword(
-            Usuario usuario,
-            string confirmarPassword)
+        private string ValidarConfirmacionPassword(Usuario usuario, string confirmarPassword)
         {
             if (usuario.Password != confirmarPassword)
             {
@@ -148,9 +145,9 @@ namespace Quiniegol.Core.Controllers
 
         private string VerificarIdExistente(Usuario usuario)
         {
-            Usuario? usuarioExistente =
-                UsuariosData.BuscarPorIdEmpleado(usuario.IdEmpleado);
+            Usuario? usuarioExistente = UsuariosData.BuscarPorIdEmpleado(usuario.IdEmpleado);
 
+            // No permite mas de un usuario con el mismo ID
             if (usuarioExistente != null)
             {
                 return "El ID del empleado ya se encuentra registrado";
@@ -161,9 +158,9 @@ namespace Quiniegol.Core.Controllers
 
         private string VerificarCorreoExistente(Usuario usuario)
         {
-            Usuario? usuarioExistente =
-                UsuariosData.BuscarPorCorreo(usuario.Correo);
+            Usuario? usuarioExistente = UsuariosData.BuscarPorCorreo(usuario.Correo);
 
+            // No se permite mas de un usuario con el mismo correo
             if (usuarioExistente != null)
             {
                 return "El correo ya se encuentra registrado";
@@ -172,7 +169,9 @@ namespace Quiniegol.Core.Controllers
             return "";
         }
 
-        public string IniciarSesion(string idEmpleado, string password)
+        public string IniciarSesion(
+            string idEmpleado,
+            string password)
         {
             if (string.IsNullOrWhiteSpace(idEmpleado))
             {
@@ -184,8 +183,7 @@ namespace Quiniegol.Core.Controllers
                 return "Debe de ingresar la contraseña";
             }
 
-            Usuario? usuario =
-                UsuariosData.BuscarPorIdEmpleado(idEmpleado);
+            Usuario? usuario = UsuariosData.BuscarPorIdEmpleado(idEmpleado);
 
             if (usuario == null)
             {
@@ -203,6 +201,62 @@ namespace Quiniegol.Core.Controllers
         public Usuario? ObtenerUsuario(string idEmpleado)
         {
             return UsuariosData.BuscarPorIdEmpleado(idEmpleado);
+        }
+
+        public string CambiarPassword(string idEmpleado, string nuevaPassword)
+        {
+            if (string.IsNullOrWhiteSpace(nuevaPassword))
+            {
+                return "Debe ingresar la nueva contraseña.";
+            }
+
+            if (nuevaPassword.Length < 5)
+            {
+                return "La contraseña debe tener al menos 5 caracteres.";
+            }
+
+            foreach (char caracter in nuevaPassword)
+            {
+                if (!char.IsLetter(caracter))
+                {
+                    return "La contraseña solo puede contener letras.";
+                }
+            }
+
+            Usuario? usuario = UsuariosData.BuscarPorIdEmpleado(idEmpleado);
+
+            if (usuario == null)
+            {
+                return "Usuario no encontrado.";
+            }
+
+            // Se actualiza la contraseña y se guarda el usuario
+            usuario.Password = nuevaPassword;
+
+            UsuariosData.ActualizarUsuario(usuario);
+
+            return "Contraseña actualizada correctamente.";
+        }
+
+        public string EliminarUsuario(string idEmpleado)
+        {
+            Usuario? usuario =
+                UsuariosData.BuscarPorIdEmpleado(idEmpleado);
+
+            if (usuario == null)
+            {
+                return "Usuario no encontrado.";
+            }
+
+            // Regla para no permitir eliminar un administrador
+            if (usuario.IdRol == 1)
+            {
+                return "No se puede eliminar un administrador.";
+            }
+
+            UsuariosData.EliminarUsuario(usuario);
+
+            return "Usuario eliminado correctamente.";
         }
     }
 }

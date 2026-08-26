@@ -1,6 +1,13 @@
-﻿@page "/principal-usuario"
+@page "/principal-usuario"
+@rendermode InteractiveServer
+
 @using Quiniegol.Core.Utils
-@inject NavigationManager Navigation
+@using Quiniegol.Core.Data
+@using Quiniegol.Core.Models
+@using Quiniegol.Core.Controllers
+
+@inject SesionService Sesion
+@implements IDisposable
 
 <h3>Principal - Usuario</h3>
 
@@ -10,24 +17,157 @@
 }
 else if (!Sesion.EsUser)
 {
-    <p>No tiene permisos para acceder a esta página.</p>
+    <p>No tiene permisos para acceder a esta página, favor contactar al administrador.</p>
 }
 else
 {
-    <p>Bienvenido, @Sesion.UsuarioActual!.Nombre</p>
+    <p>Bienvenido, @Sesion.UsuarioActual!.Nombre @Sesion.UsuarioActual!.Apellido</p>
 
-    <button @onclick="IrPronosticos">Pronósticos</button>
-    <button @onclick="IrRanking">Ranking</button>
+    @* Notificación: partidos abiertos sin pronosticar *@
+    @if (partidosSinPronosticar.Count > 0)
+    {
+        <p><strong>Tienes @partidosSinPronosticar.Count partido(s) pendiente(s) de pronosticar:</strong></p>
+
+        <ul>
+            @foreach (Partido partido in partidosSinPronosticar)
+            {
+                <li>
+                    @ObtenerNombreEquipo(partido.IdEquipoLocal)
+                    vs
+                    @ObtenerNombreEquipo(partido.IdEquipoVisitante)
+                </li>
+            }
+        </ul>
+
+        <a href="/pronosticos">Ir a pronosticar</a>
+
+        <br /><br />
+    }
+
+    <h4>Mis estadísticas</h4>
+
+    <p>Pronósticos realizados: @totalPronosticos</p>
+    <p>Aciertos: @totalAciertos</p>
+    <p>Porcentaje de acierto: @porcentajeAcierto.ToString("F1")%</p>
+
+    <br />
+
+    <h4>Equipo más apostado</h4>
+
+    @if (equipoMasApostado != null)
+    {
+        <p>@equipoMasApostado.Nombre</p>
+    }
+    else
+    {
+        <p>Sin datos todavía.</p>
+    }
+
+    <br />
+
+    <h4>Equipo sorpresa</h4>
+
+    @if (equipoSorpresa != null)
+    {
+        <p>@equipoSorpresa.Nombre</p>
+    }
+    else
+    {
+        <p>Sin datos todavía.</p>
+    }
+
+    <br />
+
+    <h4>Mis insignias</h4>
+
+    @if (insignias.Count == 0)
+    {
+        <p>Aún no tienes insignias. ¡Realiza pronósticos para obtenerlas!</p>
+    }
+    else
+    {
+        <ul>
+            @foreach (Insignia insignia in insignias)
+            {
+                <li>
+                    <strong>@insignia.Nombre</strong> — @insignia.Descripcion
+                </li>
+            }
+        </ul>
+    }
+
 }
 
 @code {
-    private void IrPronosticos()
+    private EstadisticasController estadisticas = new EstadisticasController();
+
+    private List<Equipo> equipos = new List<Equipo>();
+
+    // Partidos abiertos que el usuario todavía no ha pronosticado
+    private List<Partido> partidosSinPronosticar = new List<Partido>();
+
+    private Equipo? equipoMasApostado;
+
+    private Equipo? equipoSorpresa;
+
+    private int totalPronosticos;
+
+    private int totalAciertos;
+
+    private double porcentajeAcierto;
+
+    private List<Insignia> insignias = new List<Insignia>();
+
+    protected override void OnInitialized()
     {
-        Navigation.NavigateTo("/pronosticos");
+        Sesion.OnCambio += SesionCambio;
+
+        if (Sesion.InicioSesion && Sesion.EsUser)
+        {
+            CargarDatos();
+        }
     }
 
-    private void IrRanking()
+    private void SesionCambio()
     {
-        Navigation.NavigateTo("/ranking");
+        if (Sesion.InicioSesion && Sesion.EsUser)
+        {
+            CargarDatos();
+        }
+        InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        Sesion.OnCambio -= SesionCambio;
+    }
+
+    private void CargarDatos()
+    {
+        equipos = EquiposData.LeerEquipos();
+
+        string idEmpleado = Sesion.UsuarioActual!.IdEmpleado;
+
+        totalPronosticos  = estadisticas.ObtenerCantidadPronosticosUsuario(idEmpleado);
+        totalAciertos     = estadisticas.ObtenerAciertosUsuario(idEmpleado);
+        porcentajeAcierto = estadisticas.ObtenerPorcentajeAcierto(idEmpleado);
+        equipoMasApostado = estadisticas.ObtenerEquipoMasApostado(idEmpleado);
+        equipoSorpresa    = estadisticas.ObtenerEquipoSorpresa();
+        insignias         = estadisticas.ObtenerInsigniasUsuario(idEmpleado);
+
+        List<int> yaPronosticados = PronosticosData.LeerPronosticos()
+            .Where(p => p.IdEmpleado == idEmpleado)
+            .Select(p => p.IdPartido)
+            .ToList();
+
+        partidosSinPronosticar = PartidosData.LeerPartidos()
+            .Where(p => p.Estado == "Abierto" && !yaPronosticados.Contains(p.IdPartido))
+            .ToList();
+    }
+
+    private string ObtenerNombreEquipo(int idEquipo)
+    {
+        Equipo? equipo = equipos.FirstOrDefault(e => e.IdEquipo == idEquipo);
+        return equipo?.Nombre ?? "Equipo desconocido";
     }
 }

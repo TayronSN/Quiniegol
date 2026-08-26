@@ -1,10 +1,14 @@
-﻿@page "/partidos"
+@page "/partidos"
 @rendermode InteractiveServer
 
 @using Quiniegol.Core.Models
 @using Quiniegol.Core.Data
 @using Quiniegol.Core.Controllers
 @using Quiniegol.Core.Utils
+
+@inject IJSRuntime JS
+@inject SesionService Sesion
+@implements IDisposable
 
 <h3>Partidos</h3>
 
@@ -41,11 +45,9 @@ else
             <tbody>
                 @foreach (Partido partido in partidos)
                 {
-                    Equipo? equipoLocal =
-                        EquiposData.BuscarPorId(partido.IdEquipoLocal);
+                    Equipo? equipoLocal = EquiposData.BuscarPorId(partido.IdEquipoLocal);
 
-                    Equipo? equipoVisitante =
-                        EquiposData.BuscarPorId(partido.IdEquipoVisitante);
+                    Equipo? equipoVisitante = EquiposData.BuscarPorId(partido.IdEquipoVisitante);
 
                     <tr>
                         <td>@partido.IdPartido</td>
@@ -120,16 +122,14 @@ else
     <div>
         <label>Partido</label>
 
-        <select @bind="idPartidoSeleccionado">
+        <select @bind="idPartidoActualizar">
             <option value="0">Seleccione un partido</option>
 
             @foreach (Partido partido in partidos)
             {
-                Equipo? equipoLocal =
-                    EquiposData.BuscarPorId(partido.IdEquipoLocal);
+                Equipo? equipoLocal = EquiposData.BuscarPorId(partido.IdEquipoLocal);
 
-                Equipo? equipoVisitante =
-                    EquiposData.BuscarPorId(partido.IdEquipoVisitante);
+                Equipo? equipoVisitante = EquiposData.BuscarPorId(partido.IdEquipoVisitante);
 
                 <option value="@partido.IdPartido">
                     @equipoLocal?.Nombre vs @equipoVisitante?.Nombre
@@ -157,6 +157,35 @@ else
         Actualizar partido
     </button>
 
+    <br />
+
+    <h4>Eliminar partido</h4>
+
+    <div>
+        <label>Partido</label>
+
+        <select @bind="idPartidoEliminar">
+            <option value="0">Seleccione un partido</option>
+
+            @foreach (Partido partido in partidos)
+            {
+                Equipo? equipoLocal = EquiposData.BuscarPorId(partido.IdEquipoLocal);
+
+                Equipo? equipoVisitante = EquiposData.BuscarPorId(partido.IdEquipoVisitante);
+
+                <option value="@partido.IdPartido">
+                    @equipoLocal?.Nombre vs @equipoVisitante?.Nombre
+                </option>
+            }
+        </select>
+    </div>
+
+    <br />
+
+    <button @onclick="EliminarPartido">
+        Eliminar partido
+    </button>
+
     <p>@mensaje</p>
 }
 
@@ -167,7 +196,10 @@ else
 
     private Partido nuevoPartido = new Partido();
 
-    private int idPartidoSeleccionado;
+    // Se mantienen IDs separados para que actualizar y eliminar puedan seleccionar partidos de forma independiente
+    private int idPartidoActualizar;
+
+    private int idPartidoEliminar;
 
     private string resultadoSeleccionado = "";
 
@@ -175,33 +207,36 @@ else
 
     protected override void OnInitialized()
     {
+        Sesion.OnCambio += SesionCambio;
         partidos = PartidosData.LeerPartidos();
+        equipos  = EquiposData.LeerEquipos();
+    }
 
-        equipos = EquiposData.LeerEquipos();
+    private void SesionCambio()
+    {
+        InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        Sesion.OnCambio -= SesionCambio;
     }
 
     private void RegistrarPartido()
     {
-        PartidoController partidoController =
-            new PartidoController();
+        PartidoController controller = new PartidoController();
+        mensaje = controller.RegistrarPartido(nuevoPartido);
 
-        string resultado =
-            partidoController.RegistrarPartido(nuevoPartido);
-
-        mensaje = resultado;
-
-        if (resultado == "Partido registrado correctamente.")
+        if (mensaje == "Partido registrado correctamente.")
         {
-            partidos = PartidosData.LeerPartidos();
-
+            partidos     = PartidosData.LeerPartidos();
             nuevoPartido = new Partido();
         }
     }
 
     private void ActualizarPartido()
     {
-        Partido? partido =
-            PartidosData.BuscarPorId(idPartidoSeleccionado);
+        Partido? partido = PartidosData.BuscarPorId(idPartidoActualizar);
 
         if (partido == null)
         {
@@ -211,21 +246,45 @@ else
 
         partido.Resultado = resultadoSeleccionado;
 
-        PartidoController partidoController =
-            new PartidoController();
+        PartidoController controller = new PartidoController();
+        mensaje = controller.ActualizarPartido(partido);
 
-        string resultado =
-            partidoController.ActualizarPartido(partido);
-
-        mensaje = resultado;
-
-        if (resultado == "Partido actualizado correctamente.")
+        if (mensaje == "Partido actualizado correctamente.")
         {
-            partidos = PartidosData.LeerPartidos();
-
-            idPartidoSeleccionado = 0;
-
+            partidos              = PartidosData.LeerPartidos();
+            idPartidoActualizar   = 0;
             resultadoSeleccionado = "";
+        }
+    }
+
+    private async Task EliminarPartido()
+    {
+        Partido? partido = PartidosData.BuscarPorId(idPartidoEliminar);
+
+        if (partido == null)
+        {
+            mensaje = "Seleccione un partido";
+            return;
+        }
+
+        Equipo? equipoLocal     = EquiposData.BuscarPorId(partido.IdEquipoLocal);
+        Equipo? equipoVisitante = EquiposData.BuscarPorId(partido.IdEquipoVisitante);
+        string nombrePartido    = $"{equipoLocal?.Nombre} vs {equipoVisitante?.Nombre}";
+
+        bool confirmar = await JS.InvokeAsync<bool>("confirm", $"¿Desea eliminar el partido {nombrePartido}?");
+
+        if (!confirmar)
+        {
+            return;
+        }
+
+        PartidoController controller = new PartidoController();
+        mensaje = controller.EliminarPartido(idPartidoEliminar);
+
+        if (mensaje == "Partido eliminado correctamente.")
+        {
+            partidos          = PartidosData.LeerPartidos();
+            idPartidoEliminar = 0;
         }
     }
 }

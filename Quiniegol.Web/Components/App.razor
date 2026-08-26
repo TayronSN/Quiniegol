@@ -1,22 +1,38 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Define la ruta base desde la que se cargan las páginas y recursos de la aplicación. -->
     <base href="/" />
+
+    <!-- Permite precargar recursos necesarios antes de renderizar la aplicación. -->
     <ResourcePreloader />
+
     <link rel="stylesheet" href="@Assets["lib/bootstrap/dist/css/bootstrap.min.css"]" />
     <link rel="stylesheet" href="@Assets["app.css"]" />
     <link rel="stylesheet" href="@Assets["Quiniegol.Web.styles.css"]" />
+
+    <!-- Permite a Blazor resolver los recursos estáticos utilizados por la aplicación. -->
     <ImportMap />
+
     <link rel="icon" type="image/png" href="favicon.png" />
+
+    <!-- Permite que los componentes Razor agreguen contenido adicional al <head>. -->
     <HeadOutlet />
 </head>
 
 <body>
+
+    <!-- Contiene las rutas y páginas principales de la aplicación Blazor. -->
     <Routes />
+
+    <!-- Muestra la interfaz utilizada cuando se pierde la conexión con el servidor. -->
     <ReconnectModal />
+
+    <!-- Carga el JavaScript necesario para que Blazor Web funcione en el navegador. -->
     <script src="@Assets["_framework/blazor.web.js"]"></script>
 </body>
 

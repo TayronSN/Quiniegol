@@ -1,30 +1,130 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+@rendermode InteractiveServer
+@using Quiniegol.Core.Utils
+@inject SesionService Sesion
+@implements IDisposable
+
+<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="">Quiniegol.Web</a>
+        @if (Sesion.EsAdmin)
+        {
+            <!-- El administrador es dirigido a su página principal. -->
+            <a class="navbar-brand" href="/principal">
+                Quiniegol
+            </a>
+        }
+        else
+        {
+            <!-- El usuario normal es dirigido a su página principal. -->
+            <a class="navbar-brand" href="/principal-usuario">
+                Quiniegol
+            </a>
+        }
     </div>
 </div>
 
-<input type="checkbox" title="Navigation menu" class="navbar-toggler" />
+<input type="checkbox"
+       title="Navigation menu"
+       class="navbar-toggler" />
 
-<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
+<div class="nav-scrollable"
+     onclick="document.querySelector('.navbar-toggler').click()">
+
     <nav class="nav flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
-            </NavLink>
-        </div>
 
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Counter
-            </NavLink>
-        </div>
+        <!-- Opciones disponibles exclusivamente para administradores. -->
+        @if (Sesion.EsAdmin)
+        {
+            <div class="nav-item px-3">
+                <NavLink class="nav-link"
+                         href="/principal">
+                    Principal
+                </NavLink>
+            </div>
 
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="weather">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Weather
-            </NavLink>
-        </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link"
+                         href="/partidos">
+                    Partidos
+                </NavLink>
+            </div>
+
+            <div class="nav-item px-3">
+                <NavLink class="nav-link"
+                         href="/usuarios">
+                    Usuarios
+                </NavLink>
+            </div>
+
+            <div class="nav-item px-3">
+                <NavLink class="nav-link"
+                         href="/pronosticos">
+                    Pronósticos
+                </NavLink>
+            </div>
+
+            <div class="nav-item px-3">
+                <NavLink class="nav-link"
+                         href="/ranking">
+                    Ranking
+                </NavLink>
+            </div>
+        }
+        else if (Sesion.EsUser)
+        {
+            <!-- Opciones disponibles para usuarios normales. -->
+
+            <div class="nav-item px-3">
+                <NavLink class="nav-link"
+                         href="/principal-usuario">
+                    Principal
+                </NavLink>
+            </div>
+
+            <div class="nav-item px-3">
+                <NavLink class="nav-link"
+                         href="/pronosticos">
+                    Pronósticos
+                </NavLink>
+            </div>
+
+            <div class="nav-item px-3">
+                <NavLink class="nav-link"
+                         href="/ranking">
+                    Ranking
+                </NavLink>
+            </div>
+        }
+
+        <!-- Solo muestra la opción de cerrar sesión cuando existe una sesión activa. -->
+        @if (Sesion.InicioSesion)
+        {
+            <div class="nav-item px-3">
+                <NavLink class="nav-link"
+                         href="/logout">
+                    Cerrar sesión
+                </NavLink>
+            </div>
+        }
+
     </nav>
 </div>
 
+@code {
+    protected override void OnInitialized()
+    {
+        // Se suscribe al evento para que el menú se actualice cuando cambia la sesión.
+        Sesion.OnCambio += ActualizarMenu;
+    }
+
+    private void ActualizarMenu()
+    {
+        // Fuerza que Blazor vuelva a renderizar el NavMenu con el estado actual de la sesión.
+        InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        // Se desuscribe al destruir el componente para evitar fugas de memoria.
+        Sesion.OnCambio -= ActualizarMenu;
+    }
+}

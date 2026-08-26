@@ -1,5 +1,250 @@
-﻿<h3>Usuarios</h3>
+@page "/usuarios"
+@rendermode InteractiveServer
+
+@using Quiniegol.Core.Models
+@using Quiniegol.Core.Data
+@using Quiniegol.Core.Utils
+@using Quiniegol.Core.Controllers
+
+@inject IJSRuntime JS
+@inject SesionService Sesion
+@implements IDisposable
+
+<h3>Usuarios</h3>
+
+@if (!Sesion.InicioSesion)
+{
+    <p>Sesion no iniciada.</p>
+}
+else if (!Sesion.EsAdmin)
+{
+    <p>No tiene permisos para acceder a esta página.</p>
+}
+else
+{
+    <h4>Usuarios registrados</h4>
+
+    @if (usuarios.Count == 0)
+    {
+        <p>No hay usuarios registrados.</p>
+    }
+    else
+    {
+        <table>
+            <thead>
+                <tr>
+                    <th>ID empleado</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Departamento</th>
+                    <th>Correo</th>
+                    <th>Contraseña</th>
+                    <th>Rol</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (Usuario usuario in usuarios)
+                {
+                    <tr>
+                        <td>@usuario.IdEmpleado</td>
+                        <td>@usuario.Nombre</td>
+                        <td>@usuario.Apellido</td>
+                        <td>@usuario.Departamento</td>
+                        <td>@usuario.Correo</td>
+                        <td>@usuario.Password</td>
+                        <td>@ObtenerNombreRol(usuario.IdRol)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+    <br />
+
+    <button @onclick="ActualizarLista">
+        Actualizar Lista
+    </button>
+
+    <a href="@ObtenerArchivoUsuarios()"
+       download="Usuarios.txt">
+        Descargar Usuarios
+    </a>
+
+    <br />
+    <br />
+
+    <h4>Cambiar Contraseña</h4>
+
+    <div>
+        <label>Usuario</label>
+
+        <select @bind="idUsuarioCambiarPassword">
+            <option value="">Seleccione un usuario</option>
+
+            @foreach (Usuario usuario in usuarios)
+            {
+                <option value="@usuario.IdEmpleado">
+                    @usuario.IdEmpleado - @usuario.Nombre @usuario.Apellido
+                </option>
+            }
+        </select>
+    </div>
+
+    <br />
+
+    <div>
+        <label>Nueva contraseña</label>
+        <input type="password" @bind="nuevaPassword" />
+    </div>
+
+    <br />
+
+    <button @onclick="CambiarPassword">
+        Cambiar contraseña
+    </button>
+
+    <br />
+    <br />
+
+    <h4>Eliminar Usuario</h4>
+
+    <div>
+        <label>Usuario</label>
+
+        <select @bind="idUsuarioSeleccionado">
+            <option value="">
+                Seleccione un usuario
+            </option>
+
+            @foreach (Usuario usuario in usuarios)
+            {
+                <option value="@usuario.IdEmpleado">
+                    @usuario.IdEmpleado - @usuario.Nombre @usuario.Apellido
+                </option>
+            }
+        </select>
+    </div>
+
+    <br />
+
+    <button @onclick="EliminarUsuario">
+        Eliminar Usuario
+    </button>
+
+    <p>@mensaje</p>
+}
 
 @code {
+    private List<Usuario> usuarios = new List<Usuario>();
 
+    private string idUsuarioSeleccionado = "";
+
+    private string idUsuarioCambiarPassword = "";
+
+    private string nuevaPassword = "";
+
+    private string mensaje = "";
+
+    protected override void OnInitialized()
+    {
+        Sesion.OnCambio += SesionCambio;
+        CargarUsuarios();
+    }
+
+    private void SesionCambio()
+    {
+        InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        Sesion.OnCambio -= SesionCambio;
+    }
+
+    private void CargarUsuarios()
+    {
+        // Se ordenan en memoria porque int.Parse no puede traducirse a SQL por EF Core.
+        usuarios = UsuariosData.LeerUsuarios()
+            .OrderBy(u => int.Parse(u.IdEmpleado))
+            .ToList();
+    }
+
+    private void ActualizarLista()
+    {
+        CargarUsuarios();
+        mensaje = "Lista actualizada.";
+    }
+
+    private void CambiarPassword()
+    {
+        if (string.IsNullOrWhiteSpace(idUsuarioCambiarPassword))
+        {
+            mensaje = "Seleccione un usuario.";
+            return;
+        }
+
+        UsuarioController controller = new UsuarioController();
+        mensaje = controller.CambiarPassword(idUsuarioCambiarPassword, nuevaPassword);
+
+        if (mensaje == "Contraseña actualizada correctamente.")
+        {
+            idUsuarioCambiarPassword = "";
+            nuevaPassword            = "";
+            CargarUsuarios();
+        }
+    }
+
+    private async Task EliminarUsuario()
+    {
+        if (string.IsNullOrWhiteSpace(idUsuarioSeleccionado))
+        {
+            mensaje = "Seleccione un usuario.";
+            return;
+        }
+
+        bool confirmar = await JS.InvokeAsync<bool>("confirm", "¿Desea eliminar este usuario?");
+
+        if (!confirmar)
+        {
+            return;
+        }
+
+        UsuarioController controller = new UsuarioController();
+        mensaje = controller.EliminarUsuario(idUsuarioSeleccionado);
+
+        if (mensaje == "Usuario eliminado correctamente.")
+        {
+            CargarUsuarios();
+            idUsuarioSeleccionado = "";
+        }
+    }
+
+    private string ObtenerNombreRol(int idRol)
+    {
+        return idRol == 1 ? "Administrador" : "Usuario";
+    }
+
+    private string ObtenerArchivoUsuarios()
+    {
+        List<string> lineas = new List<string>();
+
+        lineas.Add("===== USUARIOS REGISTRADOS =====");
+        lineas.Add("");
+
+        foreach (Usuario usuario in usuarios)
+        {
+            string rol = ObtenerNombreRol(usuario.IdRol);
+            lineas.Add($"ID: {usuario.IdEmpleado}");
+            lineas.Add($"Nombre: {usuario.Nombre} {usuario.Apellido}");
+            lineas.Add($"Departamento: {usuario.Departamento}");
+            lineas.Add($"Correo: {usuario.Correo}");
+            lineas.Add($"Contraseña: {usuario.Password}");
+            lineas.Add($"Rol: {rol}");
+            lineas.Add("----------------------------------------");
+        }
+
+        string contenido = string.Join(Environment.NewLine, lineas);
+        return "data:text/plain;charset=utf-8," + Uri.EscapeDataString(contenido);
+    }
 }

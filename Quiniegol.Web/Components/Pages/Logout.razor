@@ -1,0 +1,19 @@
+@page "/logout"
+@rendermode InteractiveServer
+
+@using Quiniegol.Core.Utils
+@inject NavigationManager Navigation
+@inject SesionService Sesion
+
+<p>Cerrando sesión...</p>
+
+@code {
+    protected override void OnInitialized()
+    {
+        // Elimina el usuario actual y deja la sesión sin usuario activo.
+        Sesion.Cerrar();
+
+        // Después de cerrar la sesión, devuelve al usuario al login.
+        Navigation.NavigateTo("/login");
+    }
+}

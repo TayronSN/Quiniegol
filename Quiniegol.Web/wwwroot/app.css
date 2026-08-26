@@ -1,6 +1,80 @@
+/* ─── Layout general ─── */
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
 }
+
+.page {
+    display: flex;
+    flex-direction: row;
+    min-height: 100vh;
+}
+
+/* ─── Sidebar izquierdo ─── */
+.sidebar {
+    width: 220px;
+    min-height: 100vh;
+    background-color: #1b2a3b;
+    flex-shrink: 0;
+}
+
+.sidebar .top-row {
+    background-color: rgba(0,0,0,0.2);
+    padding: 10px 16px;
+}
+
+.sidebar .navbar-brand {
+    color: #fff;
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.sidebar .nav-scrollable {
+    padding-top: 8px;
+}
+
+.sidebar .nav-item {
+    padding: 2px 0;
+}
+
+.sidebar .nav-link {
+    color: #cdd9e5;
+    padding: 8px 16px;
+    display: block;
+    text-decoration: none;
+    font-size: 0.92rem;
+    border-radius: 4px;
+    margin: 0 8px;
+}
+
+.sidebar .nav-link:hover,
+.sidebar .nav-link.active {
+    background-color: rgba(255,255,255,0.1);
+    color: #fff;
+}
+
+/* ─── Contenido principal ─── */
+main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+}
+
+.top-row.px-4 {
+    background-color: #f7f7f7;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 8px 16px;
+    font-size: 0.85rem;
+    text-align: right;
+}
+
+.content.px-4 {
+    padding: 24px;
+}
+
 
 a, .btn-link {
     color: #006bb7;

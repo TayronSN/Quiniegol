@@ -1,71 +1,48 @@
 ﻿using Quiniegol.Core.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Text.Json;
+using System.Linq;
 
 namespace Quiniegol.Core.Data
 {
     public class EquiposData
     {
-        private static readonly string rutaArchivo = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\..\Quiniegol.Core\Data\equipos.json"));
+        // Lee todos los equipos directamente desde la base de datos.
+        public static List<Equipo> LeerEquipos()
+        {
+            using AppDbContext db = new AppDbContext();
 
+            return db.Equipos.ToList();
+        }
+
+        // Busca un equipo por su ID dentro de la base de datos.
+        public static Equipo? BuscarPorId(int idEquipo)
+        {
+            using AppDbContext db = new AppDbContext();
+
+            return db.Equipos.FirstOrDefault(
+                equipo => equipo.IdEquipo == idEquipo);
+        }
+
+        // Carga los equipos oficiales en la base de datos solamente si todavía no existen equipos registrados.
         public static void InicializarEquipos()
         {
-            if (!File.Exists(rutaArchivo))
-            {
-                File.WriteAllText(rutaArchivo, "[]");
-            }
+            using AppDbContext db = new AppDbContext();
 
-            List<Equipo> equipos = LeerEquipos();
-
-            if (equipos.Count > 0)
+            if (db.Equipos.Any())
             {
                 return;
             }
 
-            equipos = ObtenerEquiposOficiales();
+            List<Equipo> equipos = ObtenerEquiposOficiales();
 
-            string json = JsonSerializer.Serialize(equipos, new JsonSerializerOptions
-            {
-                WriteIndented = true
-            });
+            db.Equipos.AddRange(equipos);
 
-            File.WriteAllText(rutaArchivo, json);
+            db.SaveChanges();
         }
 
-        public static List<Equipo> LeerEquipos()
-        {
-            if (!File.Exists(rutaArchivo))
-            {
-                return new List<Equipo>();
-            }
-
-            string json = File.ReadAllText(rutaArchivo);
-
-            if (string.IsNullOrWhiteSpace(json))
-            {
-                return new List<Equipo>();
-            }
-
-            List<Equipo>? equipos = JsonSerializer.Deserialize<List<Equipo>>(json);
-
-            return equipos ?? new List<Equipo>();
-        }
-
-        public static Equipo? BuscarPorId(int idEquipo)
-        {
-            foreach (Equipo equipo in LeerEquipos())
-            {
-                if (equipo.IdEquipo == idEquipo)
-                {
-                    return equipo;
-                }
-            }
-
-            return null;
-        }
-
+        // Lista inicial de los equipos que utilizará el sistema, incluyendo su grupo y la ruta de la bandera correspondiente.
         private static List<Equipo> ObtenerEquiposOficiales()
         {
             return new List<Equipo>

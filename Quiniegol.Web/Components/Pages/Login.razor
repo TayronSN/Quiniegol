@@ -1,12 +1,13 @@
-﻿@page "/"
+@page "/"
 @page "/login"
 @rendermode InteractiveServer
 @inject NavigationManager Navigation
+@inject SesionService Sesion
+
 @using Quiniegol.Core.Utils
 @using Quiniegol.Core.Models
 @using Quiniegol.Core.Data
 @using Quiniegol.Core.Controllers
-
 
 <h3>Iniciar sesión</h3>
 
@@ -22,9 +23,13 @@
 
 <br />
 
-<button @onclick="IniciarSesion">Iniciar sesión</button>
+<button @onclick="IniciarSesion">
+    Iniciar sesión
+</button>
 
-<button @onclick="IrARegistro">Registrar usuario</button>
+<button @onclick="IrARegistro">
+    Registrar usuario
+</button>
 
 <p>@mensaje</p>
 
@@ -33,22 +38,25 @@
     private string password = "";
     private string mensaje = "";
 
+    // Guarda la URL a la que se debe navegar luego de que el circuit esté activo.
+    private string? rutaNavegacion;
+
     private void IniciarSesion()
-    {   
-        
+    {
         UsuarioController usuarioController = new UsuarioController();
 
+        // El controlador valida los datos y devuelve un mensaje si algo falla.
         string resultado = usuarioController.IniciarSesion(idEmpleado, password);
 
+        // Si el controlador devuelve un mensaje, significa que alguna validación falló.
         if (!string.IsNullOrEmpty(resultado))
         {
             mensaje = resultado;
             return;
         }
 
+        // Se obtiene el usuario para conocer sus datos y su rol.
         Usuario? usuario = UsuariosData.BuscarPorIdEmpleado(idEmpleado);
-
-        mensaje = $"Sesión iniciada. Usuario: {usuario.Nombre}, Rol: {usuario.IdRol}";
 
         if (usuario == null)
         {
@@ -56,16 +64,32 @@
             return;
         }
 
+        // Guarda el usuario como la sesión actualmente activa.
         Sesion.Iniciar(usuario);
 
+        // Se guarda la ruta para navegar en el siguiente ciclo de render.
+        // Así el circuit ya está activo y SesionService tiene la sesión lista.
         if (usuario.IdRol == 1)
         {
-            Navigation.NavigateTo("/principal");
+            rutaNavegacion = "/principal";
         }
         else if (usuario.IdRol == 2)
         {
-            Navigation.NavigateTo("/principal-usuario");
+            rutaNavegacion = "/principal-usuario";
         }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        // Si hay una ruta pendiente de navegación, se ejecuta ahora que el circuit está activo.
+        if (rutaNavegacion != null)
+        {
+            string ruta = rutaNavegacion;
+            rutaNavegacion = null;
+            Navigation.NavigateTo(ruta);
+        }
+
+        await Task.CompletedTask;
     }
 
     private void IrARegistro()

@@ -1,1 +1,322 @@
-[{"IdPartido":1,"IdEquipoLocal":1,"IdEquipoVisitante":2,"Fase":"Grupos","Estado":"Cerrado","Resultado":"Local"},{"IdPartido":2,"IdEquipoLocal":1,"IdEquipoVisitante":3,"Fase":"Grupos","Estado":"Cerrado","Resultado":"Local"},{"IdPartido":3,"IdEquipoLocal":1,"IdEquipoVisitante":4,"Fase":"Grupos","Estado":"Cerrado","Resultado":"Local"},{"IdPartido":4,"IdEquipoLocal":2,"IdEquipoVisitante":3,"Fase":"Grupos","Estado":"Cerrado","Resultado":"Local"},{"IdPartido":5,"IdEquipoLocal":2,"IdEquipoVisitante":4,"Fase":"Grupos","Estado":"Cerrado","Resultado":"Empate"},{"IdPartido":6,"IdEquipoLocal":3,"IdEquipoVisitante":4,"Fase":"Grupos","Estado":"Cerrado","Resultado":"Local"},{"IdPartido":7,"IdEquipoLocal":8,"IdEquipoVisitante":5,"Fase":"Grupos","Estado":"Cerrado","Resultado":"Local"},{"IdPartido":8,"IdEquipoLocal":8,"IdEquipoVisitante":6,"Fase":"Grupos","Estado":"Cerrado","Resultado":"Local"},{"IdPartido":9,"IdEquipoLocal":8,"IdEquipoVisitante":7,"Fase":"Grupos","Estado":"Cerrado","Resultado":"Empate"},{"IdPartido":10,"IdEquipoLocal":5,"IdEquipoVisitante":6,"Fase":"Grupos","Estado":"Cerrado","Resultado":"Empate"},{"IdPartido":11,"IdEquipoLocal":5,"IdEquipoVisitante":7,"Fase":"Grupos","Estado":"Cerrado","Resultado":"Local"},{"IdPartido":12,"IdEquipoLocal":6,"IdEquipoVisitante":7,"Fase":"Grupos","Estado":"Cerrado","Resultado":"Local"},{"IdPartido":13,"IdEquipoLocal":9,"IdEquipoVisitante":10,"Fase":"Grupos","Estado":"Cerrado","Resultado":"Empate"},{"IdPartido":14,"IdEquipoLocal":9,"IdEquipoVisitante":12,"Fase":"Grupos","Estado":"Cerrado","Resultado":"Local"},{"IdPartido":15,"IdEquipoLocal":9,"IdEquipoVisitante":11,"Fase":"Grupos","Estado":"Cerrado","Resultado":"Local"},{"IdPartido":16,"IdEquipoLocal":10,"IdEquipoVisitante":12,"Fase":"Grupos","Estado":"Abierto","Resultado":""},{"IdPartido":17,"IdEquipoLocal":10,"IdEquipoVisitante":11,"Fase":"Grupos","Estado":"Abierto","Resultado":""},{"IdPartido":18,"IdEquipoLocal":12,"IdEquipoVisitante":11,"Fase":"Grupos","Estado":"Abierto","Resultado":""},{"IdPartido":19,"IdEquipoLocal":1,"IdEquipoVisitante":4,"Fase":"Grupos","Estado":"Cerrado","Resultado":"Empate"}]
+[
+  {
+    "IdPartido": 1,
+    "Estado": "Cerrado",
+    "Fase": "Grupos",
+    "IdEquipoLocal": 1,
+    "IdEquipoVisitante": 2,
+    "Resultado": "Local"
+  },
+  {
+    "IdPartido": 2,
+    "Estado": "Cerrado",
+    "Fase": "Grupos",
+    "IdEquipoLocal": 3,
+    "IdEquipoVisitante": 4,
+    "Resultado": "Empate"
+  },
+  {
+    "IdPartido": 3,
+    "Estado": "Cerrado",
+    "Fase": "Grupos",
+    "IdEquipoLocal": 5,
+    "IdEquipoVisitante": 6,
+    "Resultado": "Visitante"
+  },
+  {
+    "IdPartido": 4,
+    "Estado": "Cerrado",
+    "Fase": "Grupos",
+    "IdEquipoLocal": 7,
+    "IdEquipoVisitante": 8,
+    "Resultado": "Local"
+  },
+  {
+    "IdPartido": 5,
+    "Estado": "Cerrado",
+    "Fase": "Grupos",
+    "IdEquipoLocal": 9,
+    "IdEquipoVisitante": 10,
+    "Resultado": "Local"
+  },
+  {
+    "IdPartido": 6,
+    "Estado": "Cerrado",
+    "Fase": "Grupos",
+    "IdEquipoLocal": 11,
+    "IdEquipoVisitante": 12,
+    "Resultado": "Empate"
+  },
+  {
+    "IdPartido": 7,
+    "Estado": "Cerrado",
+    "Fase": "Grupos",
+    "IdEquipoLocal": 13,
+    "IdEquipoVisitante": 14,
+    "Resultado": "Visitante"
+  },
+  {
+    "IdPartido": 8,
+    "Estado": "Cerrado",
+    "Fase": "Grupos",
+    "IdEquipoLocal": 15,
+    "IdEquipoVisitante": 16,
+    "Resultado": "Local"
+  },
+  {
+    "IdPartido": 9,
+    "Estado": "Cerrado",
+    "Fase": "Grupos",
+    "IdEquipoLocal": 17,
+    "IdEquipoVisitante": 18,
+    "Resultado": "Local"
+  },
+  {
+    "IdPartido": 10,
+    "Estado": "Cerrado",
+    "Fase": "Grupos",
+    "IdEquipoLocal": 19,
+    "IdEquipoVisitante": 20,
+    "Resultado": "Empate"
+  },
+  {
+    "IdPartido": 11,
+    "Estado": "Cerrado",
+    "Fase": "Grupos",
+    "IdEquipoLocal": 21,
+    "IdEquipoVisitante": 22,
+    "Resultado": "Local"
+  },
+  {
+    "IdPartido": 12,
+    "Estado": "Cerrado",
+    "Fase": "Grupos",
+    "IdEquipoLocal": 23,
+    "IdEquipoVisitante": 24,
+    "Resultado": "Visitante"
+  },
+  {
+    "IdPartido": 13,
+    "Estado": "Cerrado",
+    "Fase": "Grupos",
+    "IdEquipoLocal": 25,
+    "IdEquipoVisitante": 26,
+    "Resultado": "Local"
+  },
+  {
+    "IdPartido": 14,
+    "Estado": "Cerrado",
+    "Fase": "Grupos",
+    "IdEquipoLocal": 27,
+    "IdEquipoVisitante": 28,
+    "Resultado": "Empate"
+  },
+  {
+    "IdPartido": 15,
+    "Estado": "Cerrado",
+    "Fase": "Grupos",
+    "IdEquipoLocal": 29,
+    "IdEquipoVisitante": 30,
+    "Resultado": "Local"
+  },
+  {
+    "IdPartido": 16,
+    "Estado": "Cerrado",
+    "Fase": "Grupos",
+    "IdEquipoLocal": 31,
+    "IdEquipoVisitante": 32,
+    "Resultado": "Visitante"
+  },
+  {
+    "IdPartido": 17,
+    "Estado": "Cerrado",
+    "Fase": "Grupos",
+    "IdEquipoLocal": 33,
+    "IdEquipoVisitante": 34,
+    "Resultado": "Local"
+  },
+  {
+    "IdPartido": 18,
+    "Estado": "Cerrado",
+    "Fase": "Grupos",
+    "IdEquipoLocal": 35,
+    "IdEquipoVisitante": 36,
+    "Resultado": "Empate"
+  },
+  {
+    "IdPartido": 19,
+    "Estado": "Cerrado",
+    "Fase": "Grupos",
+    "IdEquipoLocal": 37,
+    "IdEquipoVisitante": 38,
+    "Resultado": "Local"
+  },
+  {
+    "IdPartido": 20,
+    "Estado": "Cerrado",
+    "Fase": "Grupos",
+    "IdEquipoLocal": 39,
+    "IdEquipoVisitante": 40,
+    "Resultado": "Visitante"
+  },
+  {
+    "IdPartido": 21,
+    "Estado": "Cerrado",
+    "Fase": "Grupos",
+    "IdEquipoLocal": 41,
+    "IdEquipoVisitante": 42,
+    "Resultado": "Local"
+  },
+  {
+    "IdPartido": 22,
+    "Estado": "Cerrado",
+    "Fase": "Grupos",
+    "IdEquipoLocal": 43,
+    "IdEquipoVisitante": 44,
+    "Resultado": "Empate"
+  },
+  {
+    "IdPartido": 23,
+    "Estado": "Cerrado",
+    "Fase": "Grupos",
+    "IdEquipoLocal": 45,
+    "IdEquipoVisitante": 46,
+    "Resultado": "Local"
+  },
+  {
+    "IdPartido": 24,
+    "Estado": "Cerrado",
+    "Fase": "Grupos",
+    "IdEquipoLocal": 47,
+    "IdEquipoVisitante": 48,
+    "Resultado": "Visitante"
+  },
+  {
+    "IdPartido": 25,
+    "Estado": "Cerrado",
+    "Fase": "Grupos",
+    "IdEquipoLocal": 1,
+    "IdEquipoVisitante": 3,
+    "Resultado": "Empate"
+  },
+  {
+    "IdPartido": 26,
+    "Estado": "Cerrado",
+    "Fase": "Grupos",
+    "IdEquipoLocal": 5,
+    "IdEquipoVisitante": 7,
+    "Resultado": "Local"
+  },
+  {
+    "IdPartido": 27,
+    "Estado": "Cerrado",
+    "Fase": "Grupos",
+    "IdEquipoLocal": 9,
+    "IdEquipoVisitante": 11,
+    "Resultado": "Visitante"
+  },
+  {
+    "IdPartido": 28,
+    "Estado": "Cerrado",
+    "Fase": "Grupos",
+    "IdEquipoLocal": 13,
+    "IdEquipoVisitante": 15,
+    "Resultado": "Local"
+  },
+  {
+    "IdPartido": 29,
+    "Estado": "Cerrado",
+    "Fase": "Grupos",
+    "IdEquipoLocal": 17,
+    "IdEquipoVisitante": 19,
+    "Resultado": "Empate"
+  },
+  {
+    "IdPartido": 30,
+    "Estado": "Cerrado",
+    "Fase": "Grupos",
+    "IdEquipoLocal": 21,
+    "IdEquipoVisitante": 23,
+    "Resultado": "Local"
+  },
+  {
+    "IdPartido": 31,
+    "Estado": "Abierto",
+    "Fase": "Grupos",
+    "IdEquipoLocal": 25,
+    "IdEquipoVisitante": 27,
+    "Resultado": null
+  },
+  {
+    "IdPartido": 32,
+    "Estado": "Abierto",
+    "Fase": "Grupos",
+    "IdEquipoLocal": 29,
+    "IdEquipoVisitante": 31,
+    "Resultado": null
+  },
+  {
+    "IdPartido": 33,
+    "Estado": "Abierto",
+    "Fase": "Grupos",
+    "IdEquipoLocal": 33,
+    "IdEquipoVisitante": 35,
+    "Resultado": null
+  },
+  {
+    "IdPartido": 34,
+    "Estado": "Abierto",
+    "Fase": "Grupos",
+    "IdEquipoLocal": 37,
+    "IdEquipoVisitante": 39,
+    "Resultado": null
+  },
+  {
+    "IdPartido": 35,
+    "Estado": "Abierto",
+    "Fase": "Grupos",
+    "IdEquipoLocal": 41,
+    "IdEquipoVisitante": 43,
+    "Resultado": null
+  },
+  {
+    "IdPartido": 36,
+    "Estado": "Abierto",
+    "Fase": "Grupos",
+    "IdEquipoLocal": 45,
+    "IdEquipoVisitante": 47,
+    "Resultado": null
+  },
+  {
+    "IdPartido": 37,
+    "Estado": "Abierto",
+    "Fase": "Grupos",
+    "IdEquipoLocal": 2,
+    "IdEquipoVisitante": 4,
+    "Resultado": null
+  },
+  {
+    "IdPartido": 38,
+    "Estado": "Abierto",
+    "Fase": "Grupos",
+    "IdEquipoLocal": 6,
+    "IdEquipoVisitante": 8,
+    "Resultado": null
+  },
+  {
+    "IdPartido": 39,
+    "Estado": "Abierto",
+    "Fase": "Grupos",
+    "IdEquipoLocal": 10,
+    "IdEquipoVisitante": 12,
+    "Resultado": null
+  },
+  {
+    "IdPartido": 40,
+    "Estado": "Abierto",
+    "Fase": "Grupos",
+    "IdEquipoLocal": 14,
+    "IdEquipoVisitante": 16,
+    "Resultado": null
+  }
+]

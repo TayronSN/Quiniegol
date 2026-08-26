@@ -1,7 +1,11 @@
-﻿@page "/principal"
+@page "/principal"
 @rendermode InteractiveServer
+@using Quiniegol.Core.Controllers
+@using Quiniegol.Core.Data
+@using Quiniegol.Core.Models
 @using Quiniegol.Core.Utils
-@inject NavigationManager Navigation
+@inject SesionService Sesion
+@implements IDisposable
 
 <h3>Principal - Administrador</h3>
 
@@ -17,30 +21,287 @@ else
 {
     <p>Bienvenido, @Sesion.UsuarioActual!.Nombre</p>
 
-    <button @onclick="IrPartidos">Partidos</button>
-    <button @onclick="IrUsuarios">Usuarios</button>
-    <button @onclick="IrPronosticos">Pronósticos</button>
-    <button @onclick="IrRanking">Ranking</button>
+    <h4>Estadísticas</h4>
+
+    <a href="@ObtenerArchivoEstadisticas()"
+       download="Estadisticas.txt">
+        Descargar Estadísticas
+    </a>
+
+    <div>
+        <h5>Resultado más repetido</h5>
+        <p>@resultadoMasRepetido</p>
+    </div>
+
+    <div>
+        <h5>Partido con más aciertos</h5>
+
+        @if (partidoConMasAciertos != null)
+        {
+            <p>
+                @ObtenerNombreEquipo(partidoConMasAciertos.IdEquipoLocal)
+                vs
+                @ObtenerNombreEquipo(partidoConMasAciertos.IdEquipoVisitante)
+            </p>
+
+            <p>
+                Aciertos:
+                @estadisticas.ObtenerAciertosPartido(
+                    partidoConMasAciertos.IdPartido)
+            </p>
+        }
+        else
+        {
+            <p>Sin datos.</p>
+        }
+    </div>
+
+    <div>
+        <h5>Total de pronósticos</h5>
+        <p>@totalPronosticos</p>
+    </div>
+
+    <div>
+        <h5>Equipo sorpresa</h5>
+
+        @if (equipoSorpresa != null)
+        {
+            <p>@equipoSorpresa.Nombre</p>
+        }
+        else
+        {
+            <p>No hay equipo sorpresa.</p>
+        }
+    </div>
+
+    <h4>Top 5 usuarios</h4>
+
+    @if (top5.Count == 0)
+    {
+        <p>No hay datos.</p>
+    }
+    else
+    {
+        <ol>
+            @foreach (UsuarioEstadistica usuario in top5)
+            {
+                <li>
+                    @usuario.Nombre -
+                    @usuario.Aciertos aciertos
+                </li>
+            }
+        </ol>
+    }
+
+    <h4>Partidos con más pronósticos</h4>
+
+    @if (partidosConMasPronosticos.Count == 0)
+    {
+        <p>No hay datos.</p>
+    }
+    else
+    {
+        <ul>
+            @foreach (Partido partido in partidosConMasPronosticos.Take(5))
+            {
+                <li>
+                    @ObtenerNombreEquipo(partido.IdEquipoLocal)
+                    vs
+                    @ObtenerNombreEquipo(partido.IdEquipoVisitante)
+                    -
+                    @estadisticas.ObtenerCantidadPronosticos(
+                        partido.IdPartido)
+                    pronósticos
+                </li>
+            }
+        </ul>
+    }
+
+    <h4>Partidos sin aciertos</h4>
+
+    @if (partidosSinAciertos.Count == 0)
+    {
+        <p>No hay datos.</p>
+    }
+    else
+    {
+        <ul>
+            @foreach (Partido partido in partidosSinAciertos)
+            {
+                <li>
+                    @ObtenerNombreEquipo(partido.IdEquipoLocal)
+                    vs
+                    @ObtenerNombreEquipo(partido.IdEquipoVisitante)
+                </li>
+            }
+        </ul>
+    }
+
 }
 
 @code {
-    private void IrPartidos()
+    private EstadisticasController estadisticas = new EstadisticasController();
+
+    private List<Equipo> equipos = new List<Equipo>();
+
+    private string resultadoMasRepetido = "Sin resultados";
+
+    private Partido? partidoConMasAciertos;
+
+    private Equipo? equipoSorpresa;
+
+    private int totalPronosticos;
+
+    private List<UsuarioEstadistica> top5 = new List<UsuarioEstadistica>();
+
+    private List<Partido> partidosConMasPronosticos = new List<Partido>();
+
+    private List<Partido> partidosSinAciertos = new List<Partido>();
+
+    protected override void OnInitialized()
     {
-        Navigation.NavigateTo("/partidos");
+        Sesion.OnCambio += SesionCambio;
+
+        if (Sesion.InicioSesion && Sesion.EsAdmin)
+        {
+            CargarEstadisticas();
+        }
     }
 
-    private void IrUsuarios()
+    private void SesionCambio()
     {
-        Navigation.NavigateTo("/usuarios");
+        if (Sesion.InicioSesion && Sesion.EsAdmin)
+        {
+            CargarEstadisticas();
+        }
+        InvokeAsync(StateHasChanged);
     }
 
-    private void IrPronosticos()
+    public void Dispose()
     {
-        Navigation.NavigateTo("/pronosticos");
+        Sesion.OnCambio -= SesionCambio;
     }
 
-    private void IrRanking()
+    private void CargarEstadisticas()
     {
-        Navigation.NavigateTo("/ranking");
+        equipos = EquiposData.LeerEquipos();
+
+        resultadoMasRepetido = estadisticas.ObtenerResultadoMasRepetido();
+
+        partidoConMasAciertos = estadisticas.ObtenerPartidoConMasAciertos();
+
+        equipoSorpresa = estadisticas.ObtenerEquipoSorpresa();
+
+        top5 = estadisticas.ObtenerTop5Aciertos();
+
+        partidosConMasPronosticos = estadisticas.ObtenerPartidosConMasPronosticos();
+
+        partidosSinAciertos = estadisticas.ObtenerPartidosSinAciertos();
+
+        totalPronosticos = PronosticosData.LeerPronosticos().Count;
     }
+
+    private string ObtenerNombreEquipo(int idEquipo)
+    {
+        Equipo? equipo = equipos.FirstOrDefault(e => e.IdEquipo == idEquipo);
+        return equipo?.Nombre ?? "Equipo desconocido";
+    }
+
+    private string ObtenerArchivoEstadisticas()
+    {
+        List<string> lineas = new List<string>();
+
+        lineas.Add("===== QUINIEGOL - ESTADÍSTICAS =====");
+        lineas.Add("");
+
+        lineas.Add(
+            $"Resultado más repetido: {resultadoMasRepetido}");
+
+        lineas.Add("");
+
+        lineas.Add("PARTIDO CON MÁS ACIERTOS");
+
+        if (partidoConMasAciertos != null)
+        {
+            lineas.Add(
+                $"{ObtenerNombreEquipo(partidoConMasAciertos.IdEquipoLocal)} " +
+                $"vs " +
+                $"{ObtenerNombreEquipo(partidoConMasAciertos.IdEquipoVisitante)}");
+
+            lineas.Add(
+                $"Aciertos: " +
+                $"{estadisticas.ObtenerAciertosPartido(
+                    partidoConMasAciertos.IdPartido)}");
+        }
+        else
+        {
+            lineas.Add("Sin datos.");
+        }
+
+        lineas.Add("");
+
+        lineas.Add(
+            $"Total de pronósticos: {totalPronosticos}");
+
+        lineas.Add("");
+
+        lineas.Add("EQUIPO SORPRESA");
+
+        if (equipoSorpresa != null)
+        {
+            lineas.Add(equipoSorpresa.Nombre);
+        }
+        else
+        {
+            lineas.Add("No hay equipo sorpresa.");
+        }
+
+        lineas.Add("");
+
+        lineas.Add("TOP 5 USUARIOS");
+
+        int posicion = 1;
+
+        foreach (UsuarioEstadistica usuario in top5)
+        {
+            lineas.Add(
+                $"{posicion}. {usuario.Nombre} - " +
+                $"{usuario.Aciertos} aciertos");
+
+            posicion++;
+        }
+
+        lineas.Add("");
+
+        lineas.Add("PARTIDOS CON MÁS PRONÓSTICOS");
+
+        foreach (Partido partido in partidosConMasPronosticos.Take(5))
+        {
+            int cantidadPronosticos = estadisticas.ObtenerCantidadPronosticos(partido.IdPartido);
+
+            lineas.Add($"{ObtenerNombreEquipo(partido.IdEquipoLocal)} " + $"vs " + $"{ObtenerNombreEquipo(partido.IdEquipoVisitante)} - " + $"{cantidadPronosticos} pronósticos");
+        }
+
+        lineas.Add("");
+
+        lineas.Add("PARTIDOS SIN ACIERTOS");
+
+        if (partidosSinAciertos.Count == 0)
+        {
+            lineas.Add("No hay partidos sin aciertos.");
+        }
+        else
+        {
+            foreach (Partido partido in partidosSinAciertos)
+            {
+                lineas.Add( $"{ObtenerNombreEquipo(partido.IdEquipoLocal)} " + $"vs " + $"{ObtenerNombreEquipo(partido.IdEquipoVisitante)}");
+            }
+        }
+
+        string contenido = string.Join(Environment.NewLine, lineas);
+
+        return
+            "data:text/plain;charset=utf-8," + Uri.EscapeDataString(contenido);
+    }
+
 }
