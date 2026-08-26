@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace Quiniegol.Models
 {
+    // Representa un partido del torneo.
     internal class Partido
     {
         public int IdPartido { get; set; }
@@ -12,11 +9,12 @@ namespace Quiniegol.Models
 
         public int IdEquipoVisitante { get; set; }
 
-        public string Fase { get; set; }
+        public string Fase { get; set; } = string.Empty;
 
-        public string Estado { get; set; }
+        // "Abierto" mientras acepta pronósticos, "Cerrado" cuando ya tiene resultado.
+        public string Estado { get; set; } = string.Empty;
 
-        public string Resultado { get; set; }
-
+        // Local, Empate o Visitante. Null mientras el partido no haya terminado.
+        public string? Resultado { get; set; }
     }
 }

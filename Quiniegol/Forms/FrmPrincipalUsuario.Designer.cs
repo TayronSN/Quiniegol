@@ -99,6 +99,7 @@
             Controls.Add(label1);
             Name = "FrmPrincipalUsuario";
             Text = "FrmPrincipalUsuario";
+            Load += FrmPrincipalUsuario_Load;
             ResumeLayout(false);
             PerformLayout();
         }

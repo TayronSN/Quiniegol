@@ -1,9 +1,9 @@
-﻿using Quiniegol.Data;
+using Quiniegol.Data;
 using Quiniegol.Models;
-using System;
 
 namespace Quiniegol.Controllers
 {
+    // Maneja el registro, actualización y eliminación de partidos.
     internal class PartidoController
     {
         public string RegistrarPartido(Partido partido)
@@ -23,7 +23,6 @@ namespace Quiniegol.Controllers
             }
 
             partido.IdPartido = PartidosData.ObtenerSiguienteId();
-            
             partido.Estado = "Abierto";
 
             PartidosData.GuardarPartido(partido);
@@ -47,6 +46,7 @@ namespace Quiniegol.Controllers
                 return mensaje;
             }
 
+            // Si tiene resultado, se cierra. Si no, se deja abierto.
             if (!string.IsNullOrWhiteSpace(partido.Resultado))
             {
                 partido.Estado = "Cerrado";
@@ -75,7 +75,7 @@ namespace Quiniegol.Controllers
             return "";
         }
 
-       private string ValidarEquipos(Partido partido)
+        private string ValidarEquipos(Partido partido)
         {
             if (partido.IdEquipoLocal == partido.IdEquipoVisitante)
             {

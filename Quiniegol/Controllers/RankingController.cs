@@ -1,15 +1,11 @@
-﻿using Quiniegol.Core.Models;
-using Quiniegol.Core.Data;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Linq;
+using Quiniegol.Data;
+using Quiniegol.Models;
 
 namespace Quiniegol.Controllers
 {
+    // Genera el ranking ordenado por puntos acumulados.
     internal class RankingController
     {
-
         public List<Ranking> GenerarRanking()
         {
             List<Ranking> ranking = new List<Ranking>();
@@ -18,14 +14,9 @@ namespace Quiniegol.Controllers
 
             foreach (Pronostico pronostico in pronosticos)
             {
-                Partido partido = PartidosData.BuscarPorId(pronostico.IdPartido);
+                Partido? partido = PartidosData.BuscarPorId(pronostico.IdPartido);
 
-                if (partido == null)
-                {
-                    continue;
-                }
-
-                if (partido.Estado != "Cerrado")
+                if (partido == null || partido.Estado != "Cerrado")
                 {
                     continue;
                 }
@@ -35,7 +26,7 @@ namespace Quiniegol.Controllers
                     continue;
                 }
 
-                Ranking jugador = null;
+                Ranking? jugador = null;
 
                 foreach (Ranking r in ranking)
                 {
@@ -48,22 +39,16 @@ namespace Quiniegol.Controllers
 
                 if (jugador == null)
                 {
-                    jugador = new Ranking();
-
-                    jugador.IdEmpleado = pronostico.IdEmpleado;
-                    jugador.Puntos = 1;
-
+                    jugador = new Ranking { IdEmpleado = pronostico.IdEmpleado, Puntos = 5 };
                     ranking.Add(jugador);
                 }
                 else
                 {
-                    jugador.Puntos++;
+                    jugador.Puntos += 5;
                 }
             }
 
-            ranking = ranking.OrderByDescending(r => r.Puntos).ToList();
-            return ranking;
+            return ranking.OrderByDescending(r => r.Puntos).ToList();
         }
-
     }
 }

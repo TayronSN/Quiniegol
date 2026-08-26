@@ -10,6 +10,9 @@
 
   <ItemGroup>
     <None Remove="Data\usuarios.json" />
+    <None Remove="Data\partidos.json" />
+    <None Remove="Data\pronosticos.json" />
+    <None Remove="Data\equipos.json" />
     <None Remove="Forms\FrmPronosticos.resx~RF86f64b.TMP" />
   </ItemGroup>
 
@@ -17,10 +20,19 @@
     <Content Include="Data\usuarios.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Data\partidos.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\pronosticos.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\equipos.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Proyecto#2\Quiniegol-v2\src\Quiniegol.Core\Quiniegol.Core.csproj" />
+    <ProjectReference Include="..\..\..\Proyecto#2\Quiniegol-v2\Quiniegol.Core\Quiniegol.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>

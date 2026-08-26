@@ -1,28 +1,19 @@
-﻿using Quiniegol.Data;
-using Quiniegol.Core.Models;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using System.Text.Json;
+using Quiniegol.Data;
+using Quiniegol.Models;
 using System.Net.Mail;
 
 namespace Quiniegol.Controllers
 {
+    // Maneja el registro de usuarios y el inicio de sesión.
     internal class UsuarioController
     {
-
         public string RegistrarUsuario(Usuario usuario, string confirmarPassword)
-
         {
-
             string mensaje = ValidarCamposObligatorios(usuario, confirmarPassword);
 
             if (!string.IsNullOrWhiteSpace(mensaje))
             {
-
                 return mensaje;
-
             }
 
             mensaje = ValidarCorreo(usuario);
@@ -63,88 +54,66 @@ namespace Quiniegol.Controllers
             UsuariosData.GuardarUsuario(usuario);
 
             return "";
-
         }
 
         private string ValidarCamposObligatorios(Usuario usuario, string confirmarPassword)
-
         {
-
             if (string.IsNullOrWhiteSpace(usuario.IdEmpleado))
             {
-
                 return "Debe ingresar el ID del empleado";
-
             }
-                        
+
             if (string.IsNullOrWhiteSpace(usuario.Correo))
             {
-
                 return "Debe ingresar un correo valido";
-
-            }        
+            }
 
             if (string.IsNullOrWhiteSpace(usuario.Password))
             {
-
                 return "Debe ingresar una contraseña";
-
-            }           
+            }
 
             if (string.IsNullOrWhiteSpace(confirmarPassword))
             {
-
                 return "Confirme su contraseña";
-
             }
 
             if (string.IsNullOrWhiteSpace(usuario.Nombre))
             {
-
                 return "Debe ingresar un nombre valido";
-
             }
 
             if (string.IsNullOrWhiteSpace(usuario.Apellido))
             {
-
                 return "Debe ingresar un apellido valido";
-
             }
 
             if (string.IsNullOrWhiteSpace(usuario.Departamento))
             {
-
                 return "Debe ingresar un departamento de trabajo valido";
-
             }
 
             return "";
-
         }
 
         private string ValidarCorreo(Usuario usuario)
-
         {
             try
             {
-
-                MailAddress correo = new MailAddress(usuario.Correo);
-            
+                // MailAddress lanza una excepción si el texto no tiene formato de correo válido.
+                new MailAddress(usuario.Correo);
             }
             catch
             {
                 return "El correo electronico no es valido";
             }
-            
 
             return "";
-
         }
 
         private string ValidarPassword(Usuario usuario)
         {
-            if (usuario.Password.Length<5)
+            if (usuario.Password.Length < 5)
             {
                 return "La contraseña debe tener al menos 5 caracteres";
             }
@@ -158,24 +127,20 @@ namespace Quiniegol.Controllers
             }
 
             return "";
-
         }
 
         private string ValidarConfirmacionPassword(Usuario usuario, string confirmarPassword)
         {
-
             if (usuario.Password != confirmarPassword)
             {
                 return "La contraseña no coincide";
             }
 
             return "";
-        
         }
 
         private string VerificarIdExistente(Usuario usuario)
         {
-
             Usuario? usuarioExistente = UsuariosData.BuscarPorIdEmpleado(usuario.IdEmpleado);
 
             if (usuarioExistente != null)
@@ -184,7 +149,6 @@ namespace Quiniegol.Controllers
             }
 
             return "";
-
         }
 
         private string VerificarCorreoExistente(Usuario usuario)
@@ -197,7 +161,6 @@ namespace Quiniegol.Controllers
             }
 
             return "";
-        
         }
 
         public string IniciarSesion(string idEmpleado, string password)
@@ -231,7 +194,5 @@ namespace Quiniegol.Controllers
         {
             return UsuariosData.BuscarPorIdEmpleado(idEmpleado);
         }
-
-
     }
 }

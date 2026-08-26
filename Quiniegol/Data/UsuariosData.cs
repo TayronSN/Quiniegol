@@ -1,33 +1,27 @@
-﻿using Quiniegol.Core.Models;
-using System;
+using Quiniegol.Models;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Text.Json;
-
-
+using System.Windows.Forms;
 
 namespace Quiniegol.Data
 {
+    // Lee y escribe los datos de usuarios en el archivo JSON.
     internal class UsuariosData
     {
-        
-        private static readonly string rutaArchivo = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\..\Quiniegol\Data\usuarios.json"));
+        private static readonly string rutaArchivo = Path.Combine(
+            AppDomain.CurrentDomain.BaseDirectory, "Data", "usuarios.json");
+
         public static List<Usuario> LeerUsuarios()
-
         {
-
             if (!File.Exists(rutaArchivo))
-
             {
                 return new List<Usuario>();
-
             }
 
             string json = File.ReadAllText(rutaArchivo);
 
             if (string.IsNullOrWhiteSpace(json))
-
             {
                 return new List<Usuario>();
             }
@@ -38,106 +32,89 @@ namespace Quiniegol.Data
         }
 
         public static Usuario? BuscarPorIdEmpleado(string idEmpleado)
-
         {
-            List<Usuario> usuarios = LeerUsuarios();
-
-            foreach (Usuario usuario in usuarios)
-
+            foreach (Usuario usuario in LeerUsuarios())
             {
                 if (usuario.IdEmpleado == idEmpleado)
-
                 {
                     return usuario;
                 }
-
             }
 
             return null;
         }
 
         public static Usuario? BuscarPorCorreo(string correo)
-
         {
-            List<Usuario> usuarios = LeerUsuarios();
-
-            foreach (Usuario usuario in usuarios)
-
+            foreach (Usuario usuario in LeerUsuarios())
             {
                 if (usuario.Correo == correo)
-
                 {
                     return usuario;
                 }
-
             }
 
             return null;
         }
 
         public static void GuardarUsuario(Usuario usuario)
-
         {
             List<Usuario> usuarios = LeerUsuarios();
 
             usuarios.Add(usuario);
 
-            string json = JsonSerializer.Serialize(usuarios);
-
-            File.WriteAllText(rutaArchivo, json);
-
+            Guardar(usuarios);
         }
 
         public static void ActualizarUsuario(Usuario usuario)
-
         {
-
             List<Usuario> usuarios = LeerUsuarios();
 
             for (int i = 0; i < usuarios.Count; i++)
-
             {
-
                 if (usuarios[i].IdEmpleado == usuario.IdEmpleado)
-
                 {
                     usuarios[i] = usuario;
-
                     break;
                 }
-
-
             }
 
-            string json = JsonSerializer.Serialize(usuarios);
-
-            File.WriteAllText(rutaArchivo, json);
-
+            Guardar(usuarios);
         }
 
         public static void EliminarUsuario(Usuario usuario)
-
         {
             List<Usuario> usuarios = LeerUsuarios();
 
             for (int i = 0; i < usuarios.Count; i++)
-
             {
-
                 if (usuarios[i].IdEmpleado == usuario.IdEmpleado)
-
                 {
                     usuarios.RemoveAt(i);
-
                     break;
                 }
-
-
             }
 
+            Guardar(usuarios);
+        }
+
+        // Serializa la lista y la escribe en el archivo JSON.
+        private static void Guardar(List<Usuario> usuarios)
+        {
             string json = JsonSerializer.Serialize(usuarios);
 
-            File.WriteAllText(rutaArchivo, json);
+            try
+            {
+                File.WriteAllText(rutaArchivo, json);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"Error al guardar usuarios: {ex.Message}",
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
         }
     }
 }

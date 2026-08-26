@@ -1,10 +1,6 @@
-﻿using Quiniegol.Core.Controllers;
-using Quiniegol.Core.Data;
-using Quiniegol.Core.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows.Forms;
+using Quiniegol.Controllers;
+using Quiniegol.Data;
+using Quiniegol.Models;
 
 namespace Quiniegol.Forms
 {
@@ -31,7 +27,6 @@ namespace Quiniegol.Forms
 
             txtEstado.Text = "Abierto";
             txtEstado.ReadOnly = true;
-
             cmbResultado.Enabled = false;
 
             ConfigurarDataGridView();
@@ -54,21 +49,18 @@ namespace Quiniegol.Forms
         private void CargarFases()
         {
             cmbFase.Items.Clear();
-
             cmbFase.Items.Add("Grupos");
             cmbFase.Items.Add("Dieciseisavos");
             cmbFase.Items.Add("Octavos");
             cmbFase.Items.Add("Cuartos");
             cmbFase.Items.Add("Semifinal");
             cmbFase.Items.Add("Final");
-
             cmbFase.SelectedIndex = 0;
         }
 
         private void ConfigurarDataGridView()
         {
             dgvPartidos.Columns.Clear();
-
             dgvPartidos.Columns.Add("IdPartido", "ID");
             dgvPartidos.Columns.Add("EquipoLocal", "Equipo Local");
             dgvPartidos.Columns.Add("EquipoVisitante", "Equipo Visitante");
@@ -81,30 +73,15 @@ namespace Quiniegol.Forms
         {
             dgvPartidos.Rows.Clear();
 
-            List<Partido> partidos = PartidosData.LeerPartidos();
-
-            foreach (Partido partido in partidos)
+            foreach (Partido partido in PartidosData.LeerPartidos())
             {
-                Equipo equipoLocal = EquiposData.BuscarPorId(partido.IdEquipoLocal);
-                Equipo equipoVisitante = EquiposData.BuscarPorId(partido.IdEquipoVisitante);
-
-                string nombreLocal = "";
-                string nombreVisitante = "";
-
-                if (equipoLocal != null)
-                {
-                    nombreLocal = equipoLocal.Nombre;
-                }
-
-                if (equipoVisitante != null)
-                {
-                    nombreVisitante = equipoVisitante.Nombre;
-                }
+                Equipo? equipoLocal     = EquiposData.BuscarPorId(partido.IdEquipoLocal);
+                Equipo? equipoVisitante = EquiposData.BuscarPorId(partido.IdEquipoVisitante);
 
                 dgvPartidos.Rows.Add(
                     partido.IdPartido,
-                    nombreLocal,
-                    nombreVisitante,
+                    equipoLocal?.Nombre ?? "",
+                    equipoVisitante?.Nombre ?? "",
                     partido.Fase,
                     partido.Estado,
                     partido.Resultado
@@ -114,29 +91,25 @@ namespace Quiniegol.Forms
 
         private void LimpiarFormulario()
         {
-            cmbEquipoLocal.SelectedIndex = 0;
+            cmbEquipoLocal.SelectedIndex    = 0;
             cmbEquipoVisitante.SelectedIndex = 0;
-
-            cmbFase.SelectedIndex = 0;
-
-            cmbResultado.SelectedIndex = -1;
-            cmbResultado.Enabled = false;
-
-            txtEstado.Text = "Abierto";
+            cmbFase.SelectedIndex           = 0;
+            cmbResultado.SelectedIndex      = -1;
+            cmbResultado.Enabled            = false;
+            txtEstado.Text                  = "Abierto";
         }
 
         private void btnGuardar_Click(object sender, EventArgs e)
         {
-            Partido partido = new Partido();
+            Partido partido = new Partido
+            {
+                IdEquipoLocal     = Convert.ToInt32(cmbEquipoLocal.SelectedValue),
+                IdEquipoVisitante = Convert.ToInt32(cmbEquipoVisitante.SelectedValue),
+                Fase              = cmbFase.Text,
+                Resultado         = ""
+            };
 
-            partido.IdEquipoLocal = Convert.ToInt32(cmbEquipoLocal.SelectedValue);
-            partido.IdEquipoVisitante = Convert.ToInt32(cmbEquipoVisitante.SelectedValue);
-            partido.Fase = cmbFase.Text;
-            partido.Resultado = "";
-
-            string mensaje = partidoController.RegistrarPartido(partido);
-
-            MessageBox.Show(mensaje);
+            MessageBox.Show(partidoController.RegistrarPartido(partido));
 
             CargarPartidos();
             LimpiarFormulario();
@@ -151,21 +124,19 @@ namespace Quiniegol.Forms
 
             idPartidoSeleccionado = Convert.ToInt32(dgvPartidos.Rows[e.RowIndex].Cells[0].Value);
 
-            Partido partido = PartidosData.BuscarPorId(idPartidoSeleccionado);
+            Partido? partido = PartidosData.BuscarPorId(idPartidoSeleccionado);
 
             if (partido == null)
             {
                 return;
             }
 
-            cmbEquipoLocal.SelectedValue = partido.IdEquipoLocal;
+            cmbEquipoLocal.SelectedValue     = partido.IdEquipoLocal;
             cmbEquipoVisitante.SelectedValue = partido.IdEquipoVisitante;
-            cmbFase.Text = partido.Fase;
-
-            txtEstado.Text = partido.Estado;
-
-            cmbResultado.Enabled = true;
-            cmbResultado.Text = partido.Resultado;
+            cmbFase.Text                     = partido.Fase;
+            txtEstado.Text                   = partido.Estado;
+            cmbResultado.Enabled             = true;
+            cmbResultado.Text                = partido.Resultado;
         }
 
         private void btnActualizar_Click(object sender, EventArgs e)
@@ -176,21 +147,19 @@ namespace Quiniegol.Forms
                 return;
             }
 
-            Partido partido = new Partido();
+            Partido partido = new Partido
+            {
+                IdPartido         = idPartidoSeleccionado,
+                IdEquipoLocal     = Convert.ToInt32(cmbEquipoLocal.SelectedValue),
+                IdEquipoVisitante = Convert.ToInt32(cmbEquipoVisitante.SelectedValue),
+                Fase              = cmbFase.Text,
+                Resultado         = cmbResultado.Text
+            };
 
-            partido.IdPartido = idPartidoSeleccionado;
-            partido.IdEquipoLocal = Convert.ToInt32(cmbEquipoLocal.SelectedValue);
-            partido.IdEquipoVisitante = Convert.ToInt32(cmbEquipoVisitante.SelectedValue);
-            partido.Fase = cmbFase.Text;
-            partido.Resultado = cmbResultado.Text;
-
-            string mensaje = partidoController.ActualizarPartido(partido);
-
-            MessageBox.Show(mensaje);
+            MessageBox.Show(partidoController.ActualizarPartido(partido));
 
             CargarPartidos();
             LimpiarFormulario();
-
             idPartidoSeleccionado = 0;
         }
 
@@ -213,7 +182,7 @@ namespace Quiniegol.Forms
                 return;
             }
 
-            Partido partido = PartidosData.BuscarPorId(idPartidoSeleccionado);
+            Partido? partido = PartidosData.BuscarPorId(idPartidoSeleccionado);
 
             if (partido == null)
             {
@@ -227,7 +196,6 @@ namespace Quiniegol.Forms
 
             CargarPartidos();
             LimpiarFormulario();
-
             idPartidoSeleccionado = 0;
         }
     }

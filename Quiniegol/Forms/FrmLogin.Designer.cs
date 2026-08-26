@@ -37,6 +37,7 @@
             txtPassword = new TextBox();
             btnLogin = new Button();
             btnRegistro = new Button();
+            lblError = new Label();
             SuspendLayout();
             // 
             // Titulo1Lgn
@@ -117,14 +118,26 @@
             btnRegistro.Text = "Registrarse";
             btnRegistro.UseVisualStyleBackColor = true;
             btnRegistro.Click += btnRegistro_Click;
-            // 
+            //
+            // lblError
+            //
+            lblError.AutoSize = true;
+            lblError.Font = new Font("Arial", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblError.ForeColor = System.Drawing.Color.Red;
+            lblError.Location = new Point(265, 330);
+            lblError.Name = "lblError";
+            lblError.Size = new Size(0, 16);
+            lblError.TabIndex = 8;
+            lblError.Text = "";
+            //
             // FrmLogin
-            // 
+            //
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(800, 450);
+            Controls.Add(lblError);
             Controls.Add(btnRegistro);
             Controls.Add(btnLogin);
             Controls.Add(txtPassword);
@@ -151,5 +164,6 @@
         private TextBox txtPassword;
         private Button btnLogin;
         private Button btnRegistro;
+        private Label lblError;
     }
 }

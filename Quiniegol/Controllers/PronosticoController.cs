@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Quiniegol.Data;
 using Quiniegol.Models;
 
 namespace Quiniegol.Controllers
 {
+    // Maneja el registro, actualización y eliminación de pronósticos.
     internal class PronosticoController
     {
         public string RegistrarPronostico(Pronostico pronostico)
@@ -25,6 +23,7 @@ namespace Quiniegol.Controllers
                 return "Debe seleccionar un pronostico.";
             }
 
+            // Un empleado no puede tener más de un pronóstico por partido.
             foreach (Pronostico p in PronosticosData.LeerPronosticos())
             {
                 if (p.IdEmpleado == pronostico.IdEmpleado &&
@@ -50,7 +49,7 @@ namespace Quiniegol.Controllers
 
         public string EliminarPronostico(int idPronostico)
         {
-            Pronostico pronostico = PronosticosData.BuscarPorId(idPronostico);
+            Pronostico? pronostico = PronosticosData.BuscarPorId(idPronostico);
 
             if (pronostico == null)
             {

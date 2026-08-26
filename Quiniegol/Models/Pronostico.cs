@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace Quiniegol.Models
 {
+    // Representa el pronóstico que un empleado hace sobre el resultado de un partido.
     internal class Pronostico
     {
         public int IdPronostico { get; set; }
 
-        public string IdEmpleado { get; set; }
+        public string IdEmpleado { get; set; } = string.Empty;
 
         public int IdPartido { get; set; }
 
-        public string ResultadoPronosticado { get; set; }
+        // Local, Empate o Visitante.
+        public string ResultadoPronosticado { get; set; } = string.Empty;
     }
 }

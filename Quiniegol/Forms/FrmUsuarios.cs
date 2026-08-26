@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
-using Quiniegol.Core.Data;
-using Quiniegol.Core.Models;
+using Quiniegol.Data;
+using Quiniegol.Models;
 using Quiniegol.Utils;
 
 namespace Quiniegol.Forms
@@ -27,9 +20,7 @@ namespace Quiniegol.Forms
         {
             dgvUsuarios.Rows.Clear();
 
-            List<Usuario> usuarios = UsuariosData.LeerUsuarios();
-
-            foreach (Usuario usuario in usuarios)
+            foreach (Usuario usuario in UsuariosData.LeerUsuarios())
             {
                 string rol = usuario.IdRol == 1 ? "Administrador" : "Usuario";
 
@@ -53,9 +44,9 @@ namespace Quiniegol.Forms
                 return;
             }
 
-            string idEmpleado = dgvUsuarios.CurrentRow.Cells["colIdEmpleado"].Value.ToString();
+            string idEmpleado = dgvUsuarios.CurrentRow.Cells["colIdEmpleado"].Value?.ToString() ?? "";
 
-            Usuario usuario = UsuariosData.BuscarPorIdEmpleado(idEmpleado);
+            Usuario? usuario = UsuariosData.BuscarPorIdEmpleado(idEmpleado);
 
             if (usuario == null)
             {
@@ -85,22 +76,21 @@ namespace Quiniegol.Forms
             MessageBox.Show("Usuario eliminado correctamente.");
 
             CargarUsuarios();
-
         }
 
         private void btnActualizar_Click(object sender, EventArgs e)
         {
             CargarUsuarios();
-
             MessageBox.Show("Lista actualizada.");
         }
 
         private void btnDescargarUsuarios_Click(object sender, EventArgs e)
         {
-            SaveFileDialog guardar = new SaveFileDialog();
-
-            guardar.Filter = "Archivo de texto|*.txt";
-            guardar.FileName = "Usuarios.txt";
+            SaveFileDialog guardar = new SaveFileDialog
+            {
+                Filter   = "Archivo de texto|*.txt",
+                FileName = "Usuarios.txt"
+            };
 
             if (guardar.ShowDialog() != DialogResult.OK)
             {
@@ -115,7 +105,6 @@ namespace Quiniegol.Forms
             foreach (Usuario usuario in UsuariosData.LeerUsuarios())
             {
                 string rol = usuario.IdRol == 1 ? "Administrador" : "Usuario";
-
                 lineas.Add($"ID: {usuario.IdEmpleado}");
                 lineas.Add($"Nombre: {usuario.Nombre} {usuario.Apellido}");
                 lineas.Add($"Departamento: {usuario.Departamento}");

@@ -1,11 +1,4 @@
-﻿using Quiniegol.Utils;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
+using Quiniegol.Utils;
 
 namespace Quiniegol.Forms
 {
@@ -16,26 +9,23 @@ namespace Quiniegol.Forms
             InitializeComponent();
         }
 
-        private void btnCerrarSesion_Click(object sender, EventArgs e)
-        {
-            Sesion.IdEmpleado = "";
-
-            FrmLogin frmLogin = new FrmLogin();
-            frmLogin.Show();
-
-            this.Close();
-        }
+        private void FrmPrincipalUsuario_Load(object sender, EventArgs e) { }
 
         private void btnPronosticos_Click(object sender, EventArgs e)
         {
-            FrmPronosticos frmPronosticos = new FrmPronosticos();
-            frmPronosticos.ShowDialog();
+            new FrmPronosticos().ShowDialog();
         }
 
         private void btnRanking_Click(object sender, EventArgs e)
         {
-            FrmRanking frmRanking = new FrmRanking();
-            frmRanking.ShowDialog();
+            new FrmRanking().ShowDialog();
+        }
+
+        private void btnCerrarSesion_Click(object sender, EventArgs e)
+        {
+            Sesion.IdEmpleado = "";
+            new FrmLogin().Show();
+            this.Close();
         }
     }
 }

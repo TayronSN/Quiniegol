@@ -1,12 +1,5 @@
-﻿using Quiniegol.Core.Models;
-using Quiniegol.Core.Controllers;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
+using Quiniegol.Controllers;
+using Quiniegol.Models;
 
 namespace Quiniegol.Forms
 {
@@ -17,22 +10,24 @@ namespace Quiniegol.Forms
             InitializeComponent();
         }
 
+        private void FrmRegistro_Load(object sender, EventArgs e) { }
+
         private void btnRegistrar_Click(object sender, EventArgs e)
         {
-            Usuario usuario = new Usuario();
+            Usuario usuario = new Usuario
+            {
+                IdEmpleado   = txtIdEmpleado.Text,
+                Nombre       = txtNombre.Text,
+                Apellido     = txtApellido.Text,
+                Departamento = cmbDepartamento.Text,
+                Correo       = txtCorreo.Text,
+                Password     = txtPassword.Text,
+                IdRol        = 2
+            };
 
-            usuario.IdEmpleado = txtIdEmpleado.Text;
-            usuario.Nombre = txtNombre.Text;
-            usuario.Apellido = txtApellido.Text;
-            usuario.Departamento = cmbDepartamento.Text;
-            usuario.Correo = txtCorreo.Text;
-            usuario.Password = txtPassword.Text;
+            UsuarioController controller = new UsuarioController();
 
-            usuario.IdRol = 2;
-
-            UsuarioController usuarioController = new UsuarioController();
-
-            string mensaje = usuarioController.RegistrarUsuario(usuario, txtConfirmarPassword.Text);
+            string mensaje = controller.RegistrarUsuario(usuario, txtConfirmarPassword.Text);
 
             if (string.IsNullOrEmpty(mensaje))
             {
@@ -43,12 +38,6 @@ namespace Quiniegol.Forms
             {
                 MessageBox.Show(mensaje);
             }
-
-        }
-
-        private void FrmRegistro_Load(object sender, EventArgs e)
-        {
-
         }
     }
 }

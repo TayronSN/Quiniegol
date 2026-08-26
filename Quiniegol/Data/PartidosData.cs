@@ -1,19 +1,15 @@
-﻿using Quiniegol.Models;
-using System;
+using Quiniegol.Models;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 
 namespace Quiniegol.Data
 {
+    // Lee y escribe los datos de partidos en el archivo JSON.
     internal class PartidosData
     {
-        private static readonly string rutaArchivo = Path.GetFullPath(
-            Path.Combine(
-                AppDomain.CurrentDomain.BaseDirectory,
-                @"..\..\..\Data\partidos.json"
-            )
-        );
+        private static readonly string rutaArchivo = Path.Combine(
+            AppDomain.CurrentDomain.BaseDirectory, "Data", "partidos.json");
 
         public static List<Partido> LeerPartidos()
         {
@@ -36,9 +32,7 @@ namespace Quiniegol.Data
 
         public static Partido? BuscarPorId(int idPartido)
         {
-            List<Partido> partidos = LeerPartidos();
-
-            foreach (Partido partido in partidos)
+            foreach (Partido partido in LeerPartidos())
             {
                 if (partido.IdPartido == idPartido)
                 {
@@ -77,9 +71,7 @@ namespace Quiniegol.Data
 
             partidos.Add(partido);
 
-            string json = JsonSerializer.Serialize(partidos);
-
-            File.WriteAllText(rutaArchivo, json);
+            File.WriteAllText(rutaArchivo, JsonSerializer.Serialize(partidos));
         }
 
         public static void ActualizarPartido(Partido partido)
@@ -95,9 +87,7 @@ namespace Quiniegol.Data
                 }
             }
 
-            string json = JsonSerializer.Serialize(partidos);
-
-            File.WriteAllText(rutaArchivo, json);
+            File.WriteAllText(rutaArchivo, JsonSerializer.Serialize(partidos));
         }
 
         public static void EliminarPartido(Partido partido)
@@ -113,9 +103,7 @@ namespace Quiniegol.Data
                 }
             }
 
-            string json = JsonSerializer.Serialize(partidos);
-
-            File.WriteAllText(rutaArchivo, json);
+            File.WriteAllText(rutaArchivo, JsonSerializer.Serialize(partidos));
         }
     }
 }

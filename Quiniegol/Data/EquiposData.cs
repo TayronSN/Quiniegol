@@ -1,19 +1,11 @@
-﻿using Quiniegol.Models;
-using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Text.Json;
+using Quiniegol.Models;
 
 namespace Quiniegol.Data
 {
     internal class EquiposData
     {
-        private static readonly string rutaArchivo = Path.GetFullPath(
-            Path.Combine(
-                AppDomain.CurrentDomain.BaseDirectory,
-                @"..\..\..\Data\equipos.json"
-            )
-        );
+        private static readonly string rutaArchivo = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "equipos.json");
 
         public static void InicializarEquipos()
         {
@@ -31,10 +23,7 @@ namespace Quiniegol.Data
 
             equipos = ObtenerEquiposOficiales();
 
-            string json = JsonSerializer.Serialize(equipos, new JsonSerializerOptions
-            {
-                WriteIndented = true
-            });
+            string json = JsonSerializer.Serialize(equipos, new JsonSerializerOptions { WriteIndented = true });
 
             File.WriteAllText(rutaArchivo, json);
         }

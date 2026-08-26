@@ -1,13 +1,7 @@
-﻿using Quiniegol.Core.Controllers;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
+using Quiniegol.Controllers;
+using Quiniegol.Data;
+using Quiniegol.Models;
 using Quiniegol.Utils;
-using Quiniegol.Core.Models;
 
 namespace Quiniegol.Forms
 {
@@ -26,39 +20,34 @@ namespace Quiniegol.Forms
 
         private void btnLogin_Click(object sender, EventArgs e)
         {
-            UsuarioController usuarioController = new UsuarioController();
+            UsuarioController controller = new UsuarioController();
 
-            string mensaje = usuarioController.IniciarSesion(txtIdEmpleado.Text, txtPassword.Text);
+            string mensaje = controller.IniciarSesion(txtIdEmpleado.Text, txtPassword.Text);
 
-            if (string.IsNullOrEmpty(mensaje))
+            if (!string.IsNullOrEmpty(mensaje))
             {
-                Usuario usuario = usuarioController.ObtenerUsuario(txtIdEmpleado.Text);
-
-                Sesion.IdEmpleado = usuario.IdEmpleado;
-
-                MessageBox.Show("Inicio de sesion exitoso.");
-
-                if (usuario.IdRol == 1)
-                {
-                    FrmPrincipal frmPrincipal = new FrmPrincipal();
-                    frmPrincipal.Show();
-                }
-
-                else
-                {
-                    FrmPrincipalUsuario frmPrincipalUsuario = new FrmPrincipalUsuario();
-                    frmPrincipalUsuario.Show();
-                }
-
-                this.Hide();
+                lblError.Text = mensaje;
+                return;
             }
 
+            lblError.Text = "";
 
+            Usuario usuario = controller.ObtenerUsuario(txtIdEmpleado.Text)!;
+
+            Sesion.IdEmpleado = usuario.IdEmpleado;
+
+            if (usuario.IdRol == 1)
+            {
+                new FrmPrincipal().Show();
+            }
+            else
+            {
+                new FrmPrincipalUsuario().Show();
+            }
+
+            this.Hide();
         }
 
-        private void FrmLogin_Load(object sender, EventArgs e)
-        {
-
-        }
+        private void FrmLogin_Load(object sender, EventArgs e) { }
     }
 }

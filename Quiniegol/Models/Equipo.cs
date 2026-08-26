@@ -1,7 +1,6 @@
-﻿using System;
-
 namespace Quiniegol.Models
 {
+    // Representa un equipo participante del torneo.
     internal class Equipo
     {
         public int IdEquipo { get; set; }
@@ -10,6 +9,7 @@ namespace Quiniegol.Models
 
         public string Grupo { get; set; } = string.Empty;
 
+        // Ruta relativa de la imagen de la bandera del equipo.
         public string Bandera { get; set; } = string.Empty;
     }
 }

@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Quiniegol.Models;
-using System.Text.Json;
+using System.Collections.Generic;
 using System.IO;
+using System.Text.Json;
 
 namespace Quiniegol.Data
 {
+    // Lee y escribe los datos de pronósticos en el archivo JSON.
     internal class PronosticosData
     {
-        private static readonly string rutaArchivo = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,@"..\..\..\Data\pronosticos.json"));
+        private static readonly string rutaArchivo = Path.Combine(
+            AppDomain.CurrentDomain.BaseDirectory, "Data", "pronosticos.json");
 
         public static List<Pronostico> LeerPronosticos()
         {
@@ -25,16 +25,14 @@ namespace Quiniegol.Data
                 return new List<Pronostico>();
             }
 
-            List<Pronostico> pronosticos = JsonSerializer.Deserialize<List<Pronostico>>(json);
+            List<Pronostico>? pronosticos = JsonSerializer.Deserialize<List<Pronostico>>(json);
 
             return pronosticos ?? new List<Pronostico>();
         }
 
-        public static Pronostico BuscarPorId(int idPronostico)
+        public static Pronostico? BuscarPorId(int idPronostico)
         {
-            List<Pronostico> pronosticos = LeerPronosticos();
-
-            foreach (Pronostico pronostico in pronosticos)
+            foreach (Pronostico pronostico in LeerPronosticos())
             {
                 if (pronostico.IdPronostico == idPronostico)
                 {
@@ -54,6 +52,7 @@ namespace Quiniegol.Data
                 return 1;
             }
 
+            // El último elemento tiene el ID más alto.
             return pronosticos[^1].IdPronostico + 1;
         }
 
@@ -63,12 +62,7 @@ namespace Quiniegol.Data
 
             pronosticos.Add(pronostico);
 
-            string json = JsonSerializer.Serialize(pronosticos, new JsonSerializerOptions
-            {
-                WriteIndented = true
-            });
-
-            File.WriteAllText(rutaArchivo, json);
+            Guardar(pronosticos);
         }
 
         public static void ActualizarPronostico(Pronostico pronostico)
@@ -84,12 +78,7 @@ namespace Quiniegol.Data
                 }
             }
 
-            string json = JsonSerializer.Serialize(pronosticos, new JsonSerializerOptions
-            {
-                WriteIndented = true
-            });
-
-            File.WriteAllText(rutaArchivo, json);
+            Guardar(pronosticos);
         }
 
         public static void EliminarPronostico(Pronostico pronostico)
@@ -98,6 +87,11 @@ namespace Quiniegol.Data
 
             pronosticos.RemoveAll(p => p.IdPronostico == pronostico.IdPronostico);
 
+            Guardar(pronosticos);
+        }
+
+        private static void Guardar(List<Pronostico> pronosticos)
+        {
             string json = JsonSerializer.Serialize(pronosticos, new JsonSerializerOptions
             {
                 WriteIndented = true
@@ -107,4 +101,3 @@ namespace Quiniegol.Data
         }
     }
 }
-
